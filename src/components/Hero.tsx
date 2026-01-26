@@ -1,0 +1,142 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { ArrowRight, Phone } from "lucide-react";
+
+export default function Hero() {
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary-50/50 via-white to-secondary-50/30">
+      {/* Subtle Background Pattern */}
+      <div className="absolute inset-0 opacity-[0.03]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }} />
+      </div>
+
+      <div className="container mx-auto px-4 py-20 md:py-32 relative z-10">
+        <div className="max-w-5xl mx-auto">
+          {/* Main Content */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="text-center"
+          >
+            {/* Subtitle */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="inline-block mb-6"
+            >
+              <span className="text-sm tracking-[0.3em] uppercase text-primary-600 font-medium">
+                Established 2022
+              </span>
+            </motion.div>
+
+            {/* Main Heading */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="font-display text-display-md md:text-display-lg lg:text-display-xl text-gray-900 mb-8"
+            >
+              Flowertown
+            </motion.h1>
+
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="text-lg md:text-xl text-gray-600 mb-4 max-w-2xl mx-auto leading-relaxed"
+            >
+              A sanctuary of floral artistry
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="text-base text-gray-500 mb-12 tracking-wide"
+            >
+              Flowers · Gifts · Events
+            </motion.p>
+
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
+              <a
+                href="#products"
+                className="group inline-flex items-center space-x-3 bg-primary-600 hover:bg-primary-700 text-white px-10 py-4 rounded-none transition-all duration-300 shadow-sm hover:shadow-md"
+              >
+                <span className="text-sm tracking-wide font-medium">Explore Collection</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </a>
+              <a
+                href="tel:09171271659"
+                className="inline-flex items-center space-x-3 bg-white hover:bg-gray-50 text-primary-700 px-10 py-4 rounded-none border border-primary-200 transition-all duration-300"
+              >
+                <Phone className="w-4 h-4" />
+                <span className="text-sm tracking-wide font-medium">Contact Us</span>
+              </a>
+            </motion.div>
+          </motion.div>
+
+          {/* Featured Image Grid */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+            className="mt-20 grid grid-cols-3 gap-4 max-w-4xl mx-auto"
+          >
+            <div className="col-span-2 row-span-2 relative overflow-hidden group">
+              <img
+                src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=900&fit=crop"
+                alt="Featured arrangement"
+                className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </div>
+            <div className="relative overflow-hidden group">
+              <img
+                src="https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=400&h=400&fit=crop"
+                alt="Bouquet 1"
+                className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
+              />
+            </div>
+            <div className="relative overflow-hidden group">
+              <img
+                src="https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=400&h=400&fit=crop"
+                alt="Bouquet 2"
+                className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
+              />
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+      >
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="text-gray-400"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+}

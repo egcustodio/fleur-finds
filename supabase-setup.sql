@@ -1,0 +1,71 @@
+-- Stories table
+CREATE TABLE IF NOT EXISTS public.stories (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    title TEXT NOT NULL,
+    cover_image TEXT NOT NULL,
+    "order" INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Story items table
+CREATE TABLE IF NOT EXISTS public.story_items (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    story_id UUID REFERENCES public.stories(id) ON DELETE CASCADE,
+    image TEXT NOT NULL,
+    caption TEXT,
+    "order" INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Site content table (for customizable content)
+CREATE TABLE IF NOT EXISTS public.site_content (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    section TEXT NOT NULL UNIQUE,
+    content JSONB NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Enable Row Level Security
+ALTER TABLE public.stories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.story_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.site_content ENABLE ROW LEVEL SECURITY;
+
+-- Policies for public read access
+CREATE POLICY "Stories are viewable by everyone" ON public.stories
+    FOR SELECT USING (true);
+
+CREATE POLICY "Story items are viewable by everyone" ON public.story_items
+    FOR SELECT USING (true);
+
+CREATE POLICY "Site content is viewable by everyone" ON public.site_content
+    FOR SELECT USING (true);
+
+-- Policies for authenticated users (admin) - full access
+CREATE POLICY "Authenticated users can manage stories" ON public.stories
+    FOR ALL USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated users can manage story items" ON public.story_items
+    FOR ALL USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated users can manage site content" ON public.site_content
+    FOR ALL USING (auth.role() = 'authenticated');
+
+-- Insert default stories
+INSERT INTO public.stories (title, cover_image, "order") VALUES
+    ('Fresh Flowers', 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=400&h=400&fit=crop', 1),
+    ('Dried Bouquets', 'https://images.unsplash.com/photo-1610146644352-43b55c2785f8?w=400&h=400&fit=crop', 2),
+    ('Vases & Gifts', 'https://images.unsplash.com/photo-1604424952485-d7f1c7e79c61?w=400&h=400&fit=crop', 3),
+    ('Custom Orders', 'https://images.unsplash.com/photo-1487070183336-b863922373d4?w=400&h=400&fit=crop', 4),
+    ('Events', 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=400&h=400&fit=crop', 5)
+ON CONFLICT DO NOTHING;
+
+-- Create storage bucket for images
+INSERT INTO storage.buckets (id, name, public) VALUES ('flowers', 'flowers', true)
+ON CONFLICT DO NOTHING;
+
+-- Storage policies
+CREATE POLICY "Public Access" ON storage.objects FOR SELECT USING (bucket_id = 'flowers');
+CREATE POLICY "Authenticated users can upload" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'flowers' AND auth.role() = 'authenticated');
+CREATE POLICY "Authenticated users can update" ON storage.objects FOR UPDATE USING (bucket_id = 'flowers' AND auth.role() = 'authenticated');
+CREATE POLICY "Authenticated users can delete" ON storage.objects FOR DELETE USING (bucket_id = 'flowers' AND auth.role() = 'authenticated');
