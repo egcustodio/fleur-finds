@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Award, Users, Heart, Sparkles } from "lucide-react";
+import { Award, Users, Heart, Sparkles, Flower2 } from "lucide-react";
 
 const features = [
   {
@@ -45,21 +45,21 @@ export default function About() {
               transition={{ delay: 0.2 }}
               className="inline-block bg-primary-100 text-primary-700 px-4 py-2 rounded-full mb-6"
             >
-              <span className="text-sm font-semibold">About Flowertown</span>
+              <span className="text-xs font-light tracking-[0.3em] uppercase">Our Philosophy</span>
             </motion.div>
 
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              A Sanctuary of Floral Artistry
+            <h2 className="font-display text-4xl md:text-5xl font-light text-primary-900 mb-6">
+              The Art of Floral Curation
             </h2>
 
-            <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-              Flowertown is a sanctuary of floral artistry, crafting stunning bouquets and exquisite floral arrangements that bring the
-              beauty of nature into your home.
+            <p className="text-base text-gray-600 mb-6 leading-relaxed font-light">
+              At Fleur Finds, we believe in the transformative power of exceptional florals. Each arrangement is a carefully composed masterpiece, 
+              sourced from the world's finest growers and crafted with meticulous attention to detail.
             </p>
 
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              Our team is dedicated to providing exceptional service and creating memorable experiences for our clients. We are passionate
-              about flowers and are committed to spreading joy through our unique creations.
+            <p className="text-base text-gray-600 mb-8 leading-relaxed font-light">
+              Our bespoke service caters to discerning clients who appreciate refined aesthetics and uncompromising quality. 
+              Every creation tells a story of elegance, crafted to elevate moments into lasting memories.
             </p>
 
             {/* Features Grid */}
@@ -88,46 +88,18 @@ export default function About() {
             </div>
           </motion.div>
 
-          {/* Right Image Grid */}
+          {/* Right side - Remove image grid */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="relative"
+            className="relative flex items-center justify-center"
           >
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <div className="relative h-48 rounded-2xl overflow-hidden shadow-lg">
-                  <img
-                    src="https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=400&h=300&fit=crop"
-                    alt="Flower arrangement 1"
-                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-                <div className="relative h-64 rounded-2xl overflow-hidden shadow-lg">
-                  <img
-                    src="https://images.unsplash.com/photo-1560070094-e1f2ddec4337?w=400&h=400&fit=crop"
-                    alt="Flower arrangement 2"
-                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-              </div>
-              <div className="space-y-4 pt-8">
-                <div className="relative h-64 rounded-2xl overflow-hidden shadow-lg">
-                  <img
-                    src="https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=400&h=400&fit=crop"
-                    alt="Flower arrangement 3"
-                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-                <div className="relative h-48 rounded-2xl overflow-hidden shadow-lg">
-                  <img
-                    src="https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=400&h=300&fit=crop"
-                    alt="Flower arrangement 4"
-                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
+            <div className="relative w-full h-96 rounded-2xl overflow-hidden bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center shadow-xl">
+              <div className="text-center p-8">
+                <Flower2 className="w-24 h-24 text-primary-300 mx-auto mb-4" />
+                <p className="text-sm text-gray-500 tracking-wider">Gallery images can be added via admin panel</p>
               </div>
             </div>
 

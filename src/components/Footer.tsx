@@ -11,13 +11,13 @@ export default function Footer() {
           {/* Brand Section */}
           <div>
             <Link href="/" className="flex flex-col items-start group mb-4">
-              <span className="font-serif text-2xl font-bold text-primary-600 group-hover:text-primary-700 transition-colors">
-                FLOWERTOWN
+              <span className="font-display text-2xl font-light tracking-wider text-primary-800 group-hover:text-primary-900 transition-colors">
+                Fleur Finds
               </span>
-              <span className="text-sm text-gray-600 -mt-1">PH</span>
+              <span className="text-[10px] tracking-[0.3em] text-gray-500 uppercase mt-1">Luxury Florals</span>
             </Link>
-            <p className="text-gray-600 text-sm mb-4">
-              A sanctuary of floral artistry, crafting stunning bouquets and exquisite floral arrangements since 2022.
+            <p className="text-gray-500 text-sm mb-4 font-light leading-relaxed">
+              Exquisitely curated luxury bouquets and bespoke floral arrangements for discerning clientele.
             </p>
             <div className="flex space-x-4">
               <a
@@ -108,8 +108,8 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-200 mt-8 pt-8 text-center">
-          <p className="text-sm text-gray-600">
-            © {new Date().getFullYear()} Flowertown PH. All rights reserved. | Established since 2022
+          <p className="text-xs text-gray-500 tracking-wide font-light">
+            © {new Date().getFullYear()} Fleur Finds. All rights reserved.
           </p>
         </div>
       </div>

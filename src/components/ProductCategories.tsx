@@ -9,7 +9,7 @@ const categories = [
     title: "Fresh Flower Bouquets",
     description: "Beautiful fresh flower arrangements for any occasion",
     icon: Flower2,
-    image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=600&h=400&fit=crop",
+    image: "",
     color: "from-pink-500 to-rose-500",
   },
   {
@@ -17,7 +17,7 @@ const categories = [
     title: "Dried Flower Bouquets",
     description: "Long-lasting dried flower arrangements",
     icon: Package,
-    image: "https://images.unsplash.com/photo-1610146644352-43b55c2785f8?w=600&h=400&fit=crop",
+    image: "",
     color: "from-amber-500 to-orange-500",
   },
   {
@@ -25,7 +25,7 @@ const categories = [
     title: "Vases",
     description: "Elegant vases for your beautiful flowers",
     icon: Gift,
-    image: "https://images.unsplash.com/photo-1604424952485-d7f1c7e79c61?w=600&h=400&fit=crop",
+    image: "",
     color: "from-blue-500 to-cyan-500",
   },
   {
@@ -33,7 +33,7 @@ const categories = [
     title: "Money Bouquets",
     description: "Unique money bouquet arrangements",
     icon: Banknote,
-    image: "https://images.unsplash.com/photo-1545241047-6083a3684587?w=600&h=400&fit=crop",
+    image: "",
     color: "from-green-500 to-emerald-500",
   },
   {
@@ -41,7 +41,7 @@ const categories = [
     title: "Customized Bouquets",
     description: "Personalized arrangements for your special moments",
     icon: Sparkles,
-    image: "https://images.unsplash.com/photo-1487070183336-b863922373d4?w=600&h=400&fit=crop",
+    image: "",
     color: "from-purple-500 to-pink-500",
   },
   {
@@ -49,7 +49,7 @@ const categories = [
     title: "Sympathy Flowers",
     description: "Thoughtful arrangements for remembrance",
     icon: Heart,
-    image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&h=400&fit=crop",
+    image: "",
     color: "from-gray-500 to-slate-500",
   },
 ];
@@ -65,9 +65,9 @@ export default function ProductCategories() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-4">Our Collections</h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Discover our wide range of beautiful floral arrangements, crafted with love and attention to detail
+          <h2 className="font-display text-4xl md:text-5xl font-light text-primary-900 mb-4">Curated Collections</h2>
+          <p className="text-base text-gray-500 max-w-2xl mx-auto font-light">
+            Explore our meticulously curated selections, each piece a testament to timeless elegance
           </p>
         </motion.div>
 
@@ -83,20 +83,32 @@ export default function ProductCategories() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer"
               >
-                {/* Image */}
-                <div className="relative h-80 overflow-hidden">
-                  <img
-                    src={category.image}
-                    alt={category.title}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                {/* Image - Only show if image URL exists */}
+                {category.image && (
+                  <div className="relative h-80 overflow-hidden">
+                    <img
+                      src={category.image}
+                      alt={category.title}
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
-                  {/* Icon Badge */}
-                  <div className={`absolute top-4 right-4 bg-gradient-to-br ${category.color} p-3 rounded-full shadow-lg`}>
-                    <Icon className="w-6 h-6 text-white" />
+                    {/* Icon Badge */}
+                    <div className={`absolute top-4 right-4 bg-gradient-to-br ${category.color} p-3 rounded-full shadow-lg`}>
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {/* Placeholder if no image */}
+                {!category.image && (
+                  <div className="relative h-80 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                    <div className="text-center">
+                      <Icon className="w-16 h-16 text-gray-400 mx-auto mb-3" />
+                      <p className="text-xs text-gray-500 tracking-wider">Add image in admin</p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Content */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-white">

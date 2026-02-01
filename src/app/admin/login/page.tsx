@@ -49,8 +49,8 @@ export default function AdminLoginPage() {
         <div className="bg-white shadow-xl rounded-none p-8 md:p-12">
           {/* Logo/Brand */}
           <div className="text-center mb-8">
-            <h1 className="font-display text-4xl text-primary-700 mb-2">Flowertown</h1>
-            <p className="text-sm text-gray-600 tracking-wide">Admin Access</p>
+            <h1 className="font-display text-4xl text-primary-900 mb-2 font-light tracking-wider">Fleur Finds</h1>
+            <p className="text-xs text-gray-500 tracking-[0.3em] uppercase">Admin Access</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">

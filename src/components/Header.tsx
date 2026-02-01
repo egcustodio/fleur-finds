@@ -25,11 +25,13 @@ export default function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex flex-col items-start group">
-            <span className="font-serif text-2xl md:text-3xl font-bold text-primary-600 group-hover:text-primary-700 transition-colors">
-              FLOWERTOWN
-            </span>
-            <span className="text-xs md:text-sm text-gray-600 -mt-1">PH</span>
+          <Link href="/" className="flex items-center group">
+            <div className="flex flex-col">
+              <span className="font-display text-2xl md:text-3xl font-light tracking-wider text-primary-800 group-hover:text-primary-900 transition-colors">
+                Fleur Finds
+              </span>
+              <span className="text-[10px] tracking-[0.3em] text-gray-500 uppercase mt-[-4px]">Luxury Florals</span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

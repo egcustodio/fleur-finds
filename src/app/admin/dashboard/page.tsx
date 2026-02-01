@@ -50,8 +50,8 @@ export default function AdminDashboard() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="font-display text-2xl text-primary-700">Flowertown Admin</h1>
-              <p className="text-sm text-gray-600">Content Management System</p>
+              <h1 className="font-display text-2xl text-primary-900 font-light tracking-wider">Fleur Finds Admin</h1>
+              <p className="text-xs text-gray-500 tracking-wide">Content Management System</p>
             </div>
             <button
               onClick={handleLogout}

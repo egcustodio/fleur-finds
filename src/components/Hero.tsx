@@ -27,10 +27,10 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="inline-block mb-6"
+              className="inline-block mb-8"
             >
-              <span className="text-sm tracking-[0.3em] uppercase text-primary-600 font-medium">
-                Established 2022
+              <span className="text-xs tracking-[0.4em] uppercase text-gray-500 font-light">
+                Curated Floral Excellence
               </span>
             </motion.div>
 
@@ -39,9 +39,9 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="font-display text-display-md md:text-display-lg lg:text-display-xl text-gray-900 mb-8"
+              className="font-display text-display-md md:text-display-lg lg:text-display-xl text-primary-900 mb-6"
             >
-              Flowertown
+              Fleur Finds
             </motion.h1>
 
             {/* Description */}
@@ -49,18 +49,18 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-lg md:text-xl text-gray-600 mb-4 max-w-2xl mx-auto leading-relaxed"
+              className="text-lg md:text-xl text-gray-600 mb-4 max-w-2xl mx-auto leading-relaxed font-light"
             >
-              A sanctuary of floral artistry
+              Exquisitely curated luxury bouquets
             </motion.p>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.6 }}
-              className="text-base text-gray-500 mb-12 tracking-wide"
+              className="text-sm text-gray-400 mb-12 tracking-[0.2em] uppercase"
             >
-              Flowers · Gifts · Events
+              Bespoke · Refined · Timeless
             </motion.p>
 
             {/* CTA Buttons */}
@@ -72,51 +72,22 @@ export default function Hero() {
             >
               <a
                 href="#products"
-                className="group inline-flex items-center space-x-3 bg-primary-600 hover:bg-primary-700 text-white px-10 py-4 rounded-none transition-all duration-300 shadow-sm hover:shadow-md"
+                className="group inline-flex items-center space-x-3 bg-primary-900 hover:bg-primary-800 text-white px-12 py-4 rounded-none transition-all duration-300"
               >
-                <span className="text-sm tracking-wide font-medium">Explore Collection</span>
+                <span className="text-sm tracking-[0.15em] font-light uppercase">Discover</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </a>
               <a
                 href="tel:09171271659"
-                className="inline-flex items-center space-x-3 bg-white hover:bg-gray-50 text-primary-700 px-10 py-4 rounded-none border border-primary-200 transition-all duration-300"
+                className="inline-flex items-center space-x-3 bg-transparent hover:bg-primary-50 text-primary-900 px-12 py-4 rounded-none border border-primary-300 transition-all duration-300"
               >
                 <Phone className="w-4 h-4" />
-                <span className="text-sm tracking-wide font-medium">Contact Us</span>
+                <span className="text-sm tracking-[0.15em] font-light uppercase">Inquire</span>
               </a>
             </motion.div>
           </motion.div>
 
-          {/* Featured Image Grid */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.8 }}
-            className="mt-20 grid grid-cols-3 gap-4 max-w-4xl mx-auto"
-          >
-            <div className="col-span-2 row-span-2 relative overflow-hidden group">
-              <img
-                src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=900&fit=crop"
-                alt="Featured arrangement"
-                className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
-            <div className="relative overflow-hidden group">
-              <img
-                src="https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=400&h=400&fit=crop"
-                alt="Bouquet 1"
-                className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
-              />
-            </div>
-            <div className="relative overflow-hidden group">
-              <img
-                src="https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=400&h=400&fit=crop"
-                alt="Bouquet 2"
-                className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
-              />
-            </div>
-          </motion.div>
+
         </div>
       </div>
 

@@ -19,20 +19,20 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Flowertown PH - Premium Flower Bouquets & Arrangements | Naga City",
-  description: "Flowertown is a sanctuary of floral artistry in Naga City, crafting stunning bouquets and exquisite floral arrangements. Fresh flowers, dried bouquets, customized arrangements, and more. Established since 2022.",
-  keywords: ["flower shop", "bouquet", "Naga City", "fresh flowers", "dried flowers", "customized bouquets", "sympathy flowers", "money bouquets", "vases", "floral arrangements"],
-  authors: [{ name: "Flowertown PH" }],
+  title: "Fleur Finds - Luxury Flower Bouquets & Curated Floral Arrangements",
+  description: "Fleur Finds offers exquisitely curated luxury flower bouquets and bespoke floral arrangements. Each piece is a masterwork of botanical artistry, crafted with the finest blooms for discerning clientele.",
+  keywords: ["luxury flowers", "premium bouquet", "bespoke floral arrangements", "luxury flower delivery", "designer bouquets", "curated flowers", "elegant arrangements", "luxury gifts"],
+  authors: [{ name: "Fleur Finds" }],
   openGraph: {
-    title: "Flowertown PH - Premium Flower Bouquets & Arrangements",
-    description: "A sanctuary of floral artistry in Naga City. Order online and receive 10% off your first purchase!",
+    title: "Fleur Finds - Luxury Floral Artistry",
+    description: "Exquisitely curated luxury flower bouquets and bespoke arrangements for discerning clientele.",
     type: "website",
-    locale: "en_PH",
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Flowertown PH - Premium Flower Bouquets",
-    description: "Stunning bouquets and exquisite floral arrangements in Naga City",
+    title: "Fleur Finds - Luxury Flower Bouquets",
+    description: "Exquisitely curated floral masterpieces",
   },
   viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",

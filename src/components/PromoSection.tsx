@@ -5,12 +5,12 @@ import { Sparkles } from "lucide-react";
 
 export default function PromoSection() {
   return (
-    <section className="py-20 bg-gradient-to-r from-primary-600 to-primary-700 text-white relative overflow-hidden">
-      {/* Elegant Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path d="M0,0 L100,50 L0,100 Z" fill="currentColor" />
-        </svg>
+    <section className="py-20 bg-primary-900 text-white relative overflow-hidden">
+      {/* Subtle Texture */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }} />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -21,18 +21,20 @@ export default function PromoSection() {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto"
         >
-          <div className="flex items-center justify-center mb-6">
-            <Sparkles className="w-6 h-6 mr-3" />
-            <h2 className="font-display text-3xl md:text-4xl font-light tracking-wide">Special Offer</h2>
+          <div className="flex items-center justify-center mb-8">
+            <div className="h-px w-12 bg-white/30"></div>
+            <Sparkles className="w-5 h-5 mx-4 text-white/70" />
+            <div className="h-px w-12 bg-white/30"></div>
           </div>
-          <p className="text-lg md:text-xl mb-8 font-light">
-            Order Online Now & Receive <span className="font-semibold border-b-2 border-white/50">10% OFF</span> Your First Purchase
+          <h2 className="font-display text-3xl md:text-4xl font-light tracking-wide mb-6">Exclusive Introduction</h2>
+          <p className="text-base md:text-lg mb-8 font-light text-white/80 leading-relaxed">
+            Welcome to Fleur Finds. <span className="text-white border-b border-white/40">Receive 15% off</span> your inaugural order as our valued guest.
           </p>
           <a
             href="#products"
-            className="inline-flex items-center justify-center bg-white text-primary-700 hover:bg-primary-50 px-10 py-3 rounded-none font-medium text-sm tracking-wider transition-all transform hover:scale-105 shadow-lg uppercase"
+            className="inline-flex items-center justify-center bg-white text-primary-900 hover:bg-primary-50 px-12 py-4 rounded-none font-light text-xs tracking-[0.2em] transition-all uppercase"
           >
-            Browse Collection
+            View Collection
           </a>
         </motion.div>
       </div>
