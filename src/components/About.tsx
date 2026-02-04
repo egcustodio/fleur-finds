@@ -54,7 +54,7 @@ export default function About() {
 
             <p className="text-base text-gray-600 mb-6 leading-relaxed font-light">
               At Fleur Finds, we believe in the transformative power of exceptional florals. Each arrangement is a carefully composed masterpiece, 
-              sourced from the world's finest growers and crafted with meticulous attention to detail.
+              sourced from the world&apos;s finest growers and crafted with meticulous attention to detail.
             </p>
 
             <p className="text-base text-gray-600 mb-8 leading-relaxed font-light">
