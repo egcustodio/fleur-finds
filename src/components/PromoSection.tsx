@@ -5,7 +5,7 @@ import { Sparkles } from "lucide-react";
 
 export default function PromoSection() {
   return (
-    <section className="py-20 bg-gradient-to-r from-rose-500 via-pink-500 to-rose-400 text-white relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-r from-rose-700 via-rose-600 to-rose-700 text-white relative overflow-hidden">
       {/* Subtle Texture */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{
@@ -32,7 +32,7 @@ export default function PromoSection() {
           </p>
           <a
             href="#products"
-            className="inline-flex items-center justify-center bg-white text-rose-500 hover:bg-rose-50 px-12 py-4 rounded-full font-light text-xs tracking-[0.2em] transition-all uppercase shadow-lg hover:shadow-xl"
+            className="inline-flex items-center justify-center bg-white text-rose-700 hover:bg-blush-50 px-12 py-4 rounded-full font-light text-xs tracking-[0.2em] transition-all uppercase shadow-md hover:shadow-lg"
           >
             View Collection
           </a>

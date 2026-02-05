@@ -56,7 +56,7 @@ const categories = [
 
 export default function ProductCategories() {
   return (
-    <section id="products" className="py-20 bg-gradient-to-b from-white to-rose-50/20">
+    <section id="products" className="py-20 bg-gradient-to-b from-white to-blush-50/50">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
