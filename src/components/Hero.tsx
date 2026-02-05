@@ -5,11 +5,11 @@ import { ArrowRight, Phone } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary-50/50 via-white to-secondary-50/30">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-rose-50 via-pink-50/30 to-rose-100/20">
       {/* Subtle Background Pattern */}
       <div className="absolute inset-0 opacity-[0.03]">
         <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f43f5e' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
         }} />
       </div>
 
@@ -29,8 +29,8 @@ export default function Hero() {
               transition={{ delay: 0.2, duration: 0.6 }}
               className="inline-block mb-8"
             >
-              <span className="text-xs tracking-[0.4em] uppercase text-gray-500 font-light">
-                Curated Floral Excellence
+              <span className="text-xs tracking-[0.4em] uppercase text-rose-400 font-light">
+                Curated with Love
               </span>
             </motion.div>
 
@@ -44,14 +44,14 @@ export default function Hero() {
               Fleur Finds
             </motion.h1>
 
-            {/* Description */}
+            {/* Motto */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-lg md:text-xl text-gray-600 mb-4 max-w-2xl mx-auto leading-relaxed font-light"
+              className="text-lg md:text-2xl text-rose-500 mb-4 max-w-2xl mx-auto leading-relaxed font-light italic"
             >
-              Exquisitely curated luxury bouquets
+              Perfect for hearts that want to speak without words
             </motion.p>
 
             <motion.p
@@ -72,14 +72,14 @@ export default function Hero() {
             >
               <a
                 href="#products"
-                className="group inline-flex items-center space-x-3 bg-primary-900 hover:bg-primary-800 text-white px-12 py-4 rounded-none transition-all duration-300"
+                className="group inline-flex items-center space-x-3 bg-rose-500 hover:bg-rose-600 text-white px-12 py-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 <span className="text-sm tracking-[0.15em] font-light uppercase">Discover</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </a>
               <a
                 href="tel:09171271659"
-                className="inline-flex items-center space-x-3 bg-transparent hover:bg-primary-50 text-primary-900 px-12 py-4 rounded-none border border-primary-300 transition-all duration-300"
+                className="inline-flex items-center space-x-3 bg-transparent hover:bg-rose-50 text-rose-500 px-12 py-4 rounded-full border border-rose-300 transition-all duration-300"
               >
                 <Phone className="w-4 h-4" />
                 <span className="text-sm tracking-[0.15em] font-light uppercase">Inquire</span>

@@ -30,7 +30,7 @@ export default function Header() {
               <span className="font-display text-2xl md:text-3xl font-light tracking-wider text-primary-800 group-hover:text-primary-900 transition-colors">
                 Fleur Finds
               </span>
-              <span className="text-[10px] tracking-[0.3em] text-gray-500 uppercase mt-[-4px]">Luxury Florals</span>
+              <span className="text-[9px] tracking-[0.25em] text-rose-400 uppercase mt-[-2px] font-light italic">Perfect for hearts that speak without words</span>
             </div>
           </Link>
 

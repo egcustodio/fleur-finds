@@ -3,7 +3,6 @@ import StoriesHighlights from "@/components/StoriesHighlights";
 import ProductCategories from "@/components/ProductCategories";
 import About from "@/components/About";
 import ContactForm from "@/components/ContactForm";
-import Newsletter from "@/components/Newsletter";
 import PromoSection from "@/components/PromoSection";
 
 export default function Home() {
@@ -15,7 +14,6 @@ export default function Home() {
       <ProductCategories />
       <About />
       <ContactForm />
-      <Newsletter />
     </>
   );
 }

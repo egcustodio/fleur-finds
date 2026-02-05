@@ -14,7 +14,7 @@ export default function Footer() {
               <span className="font-display text-2xl font-light tracking-wider text-primary-800 group-hover:text-primary-900 transition-colors">
                 Fleur Finds
               </span>
-              <span className="text-[10px] tracking-[0.3em] text-gray-500 uppercase mt-1">Luxury Florals</span>
+              <span className="text-[9px] tracking-[0.2em] text-rose-400 uppercase mt-1 font-light italic">Perfect for hearts that speak without words</span>
             </Link>
             <p className="text-gray-500 text-sm mb-4 font-light leading-relaxed">
               Exquisitely curated luxury bouquets and bespoke floral arrangements for discerning clientele.
