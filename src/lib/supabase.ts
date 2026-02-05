@@ -1,4 +1,3 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
 // Get environment variables with fallbacks for build time
@@ -8,7 +7,10 @@ const getSupabaseServiceKey = () => process.env.SUPABASE_SERVICE_ROLE_KEY || 'pl
 
 // Client-side Supabase client
 export const createBrowserClient = () => {
-  return createClientComponentClient();
+  return createSupabaseClient(
+    getSupabaseUrl(),
+    getSupabaseAnonKey()
+  );
 };
 
 // Default client for server components
