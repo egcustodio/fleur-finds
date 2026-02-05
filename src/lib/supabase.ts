@@ -1,6 +1,11 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
+// Get environment variables with fallbacks for build time
+const getSupabaseUrl = () => process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+const getSupabaseAnonKey = () => process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key';
+const getSupabaseServiceKey = () => process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-key';
+
 // Client-side Supabase client
 export const createBrowserClient = () => {
   return createClientComponentClient();
@@ -9,16 +14,16 @@ export const createBrowserClient = () => {
 // Default client for server components
 export const createClient = () => {
   return createSupabaseClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    getSupabaseUrl(),
+    getSupabaseAnonKey()
   );
 };
 
 // Server-side Supabase client with service role (for admin operations)
 export const createAdminClient = () => {
   return createSupabaseClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    getSupabaseUrl(),
+    getSupabaseServiceKey(),
     {
       auth: {
         autoRefreshToken: false,
