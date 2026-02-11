@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@/lib/supabase";
 import { toast } from "sonner";
-import { Package, Mail, Phone, MapPin, Calendar, Tag, ChevronDown, ChevronUp } from "lucide-react";
+import { Package, Mail, Phone, MapPin, Calendar, Tag, ChevronDown, ChevronUp, Download } from "lucide-react";
 
 interface Order {
   id: string;
@@ -124,6 +124,68 @@ export default function OrdersPage() {
     ? orders 
     : orders.filter(order => order.status === statusFilter);
 
+  const exportToCSV = () => {
+    if (filteredOrders.length === 0) {
+      toast.error("No orders to export");
+      return;
+    }
+
+    // Create CSV header
+    const headers = [
+      "Order ID",
+      "Date",
+      "Customer Name",
+      "Email",
+      "Phone",
+      "Delivery Address",
+      "Status",
+      "Subtotal",
+      "Discount",
+      "Total",
+      "Promo Code",
+      "Rental Start",
+      "Rental End",
+      "Notes"
+    ];
+
+    // Create CSV rows
+    const rows = filteredOrders.map(order => [
+      order.id,
+      new Date(order.created_at).toLocaleDateString(),
+      order.customer_name,
+      order.email,
+      order.phone,
+      order.delivery_address || "",
+      order.status,
+      order.subtotal.toFixed(2),
+      order.discount.toFixed(2),
+      order.total.toFixed(2),
+      order.promo_code || "",
+      order.rental_start_date ? new Date(order.rental_start_date).toLocaleDateString() : "",
+      order.rental_end_date ? new Date(order.rental_end_date).toLocaleDateString() : "",
+      order.notes || ""
+    ]);
+
+    // Combine headers and rows
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
+    ].join("\n");
+
+    // Create download link
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `fleur-finds-orders-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast.success("Orders exported successfully!");
+  };
+
   if (loading) {
     return (
       <div className="p-6">
@@ -134,9 +196,18 @@ export default function OrdersPage() {
 
   return (
     <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-display font-light text-gray-800 mb-2">Orders Management</h1>
-        <p className="text-gray-600">View and manage customer orders</p>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-display font-light text-gray-800 mb-2">Orders Management</h1>
+          <p className="text-gray-600">View and manage customer orders</p>
+        </div>
+        <button
+          onClick={exportToCSV}
+          className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+        >
+          <Download className="w-4 h-4" />
+          <span>Export to CSV</span>
+        </button>
       </div>
 
       {/* Status Filter */}
