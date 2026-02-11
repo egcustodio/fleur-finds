@@ -87,6 +87,13 @@ export default function AdminDashboard() {
                   <span className="font-medium">Promotions</span>
                 </button>
                 <button
+                  onClick={() => router.push("/admin/settings")}
+                  className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors hover:bg-gray-100 text-gray-700"
+                >
+                  <Settings className="w-5 h-5" />
+                  <span className="font-medium">Site Settings</span>
+                </button>
+                <button
                   onClick={() => setActiveTab("stories")}
                   className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                     activeTab === "stories"

@@ -2,8 +2,66 @@
 
 import Link from "next/link";
 import { Facebook, Instagram, Mail, MapPin, Phone, Clock } from "lucide-react";
+import { useEffect, useState } from "react";
+import { createBrowserClient } from "@/lib/supabase";
+
+interface ContactInfo {
+  address: string;
+  phone: string;
+  email: string;
+  phoneNote: string;
+}
+
+interface OpeningHours {
+  days: string;
+  hours: string;
+}
 
 export default function Footer() {
+  const [contact, setContact] = useState<ContactInfo>({
+    address: "Magsaysay Avenue, Naga City 4400",
+    phone: "09171271659",
+    email: "flowertown1496@gmail.com",
+    phoneNote: "TEXT ONLY",
+  });
+  const [hours, setHours] = useState<OpeningHours>({
+    days: "Mon - Sun",
+    hours: "9:00 AM - 9:00 PM",
+  });
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const supabase = createBrowserClient();
+      
+      const { data: contactData } = await supabase
+        .from("site_content")
+        .select("content")
+        .eq("section", "contact")
+        .single();
+
+      if (contactData?.content) {
+        setContact(contactData.content as ContactInfo);
+      }
+
+      const { data: hoursData } = await supabase
+        .from("site_content")
+        .select("content")
+        .eq("section", "hours")
+        .single();
+
+      if (hoursData?.content) {
+        setHours(hoursData.content as OpeningHours);
+      }
+    } catch (error) {
+      // Use default values if fetching fails
+      console.error("Error fetching settings:", error);
+    }
+  };
+
   return (
     <footer className="bg-gradient-to-br from-gray-50 to-gray-100 border-t border-gray-200">
       <div className="container mx-auto px-4 py-12">
@@ -46,24 +104,24 @@ export default function Footer() {
             <h3 className="font-semibold text-gray-900 mb-4">Contact Us</h3>
             <div className="space-y-3">
               <a
-                href="https://maps.google.com/?q=Magsaysay+Avenue+Naga+City+4400"
+                href={`https://maps.google.com/?q=${encodeURIComponent(contact.address)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-start space-x-2 text-gray-600 hover:text-primary-600 transition-colors"
               >
                 <MapPin className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                <span className="text-sm">Magsaysay Avenue, Naga City 4400</span>
+                <span className="text-sm">{contact.address}</span>
               </a>
-              <a href="tel:09171271659" className="flex items-center space-x-2 text-gray-600 hover:text-primary-600 transition-colors">
+              <a href={`tel:${contact.phone}`} className="flex items-center space-x-2 text-gray-600 hover:text-primary-600 transition-colors">
                 <Phone className="w-5 h-5 flex-shrink-0" />
-                <span className="text-sm">09171271659 (TEXT ONLY)</span>
+                <span className="text-sm">{contact.phone} {contact.phoneNote && `(${contact.phoneNote})`}</span>
               </a>
               <a
-                href="mailto:flowertown1496@gmail.com"
+                href={`mailto:${contact.email}`}
                 className="flex items-center space-x-2 text-gray-600 hover:text-primary-600 transition-colors"
               >
                 <Mail className="w-5 h-5 flex-shrink-0" />
-                <span className="text-sm">flowertown1496@gmail.com</span>
+                <span className="text-sm">{contact.email}</span>
               </a>
             </div>
           </div>
@@ -74,8 +132,8 @@ export default function Footer() {
             <div className="flex items-start space-x-2 text-gray-600">
               <Clock className="w-5 h-5 flex-shrink-0 mt-0.5" />
               <div className="text-sm">
-                <p className="font-medium">Mon - Sun</p>
-                <p>9:00 AM - 9:00 PM</p>
+                <p className="font-medium">{hours.days}</p>
+                <p>{hours.hours}</p>
               </div>
             </div>
           </div>
@@ -101,6 +159,9 @@ export default function Footer() {
               </Link>
               <Link href="/privacy" className="block text-sm text-gray-600 hover:text-primary-600 transition-colors">
                 Privacy Policy
+              </Link>
+              <Link href="/admin/login" className="block text-sm text-gray-600 hover:text-rose-600 transition-colors font-medium">
+                Admin
               </Link>
             </div>
           </div>

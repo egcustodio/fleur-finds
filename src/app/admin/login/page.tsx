@@ -20,10 +20,31 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setLoading(true);
 
+    // Basic input validation and sanitization
+    const sanitizedEmail = email.trim().toLowerCase();
+    const sanitizedPassword = password.trim();
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(sanitizedEmail)) {
+      toast.error("Please enter a valid email address");
+      setLoading(false);
+      return;
+    }
+
+    // Validate password length
+    if (sanitizedPassword.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      setLoading(false);
+      return;
+    }
+
     try {
+      // Supabase handles SQL injection protection automatically
+      // Using parameterized queries under the hood
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+        email: sanitizedEmail,
+        password: sanitizedPassword,
       });
 
       if (error) throw error;

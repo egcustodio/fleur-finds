@@ -95,7 +95,7 @@ CREATE POLICY "Authenticated users can manage promos" ON public.promos
 CREATE POLICY "Authenticated users can manage site content" ON public.site_content
     FOR ALL USING (auth.role() = 'authenticated');
 
--- Insert default products
+-- Insert default products (WITHOUT IMAGES - admin will add their own)
 INSERT INTO public.products (title, description, price, category, featured, "order") VALUES
     ('Classic Rose Bouquet', 'Elegant arrangement of fresh red roses', 89.99, 'Fresh Flowers', true, 1),
     ('Wildflower Mix', 'Vibrant collection of seasonal wildflowers', 65.00, 'Fresh Flowers', true, 2),
@@ -105,13 +105,27 @@ INSERT INTO public.products (title, description, price, category, featured, "ord
     ('Sympathy Arrangement', 'Thoughtful white lilies and roses', 95.00, 'Sympathy', false, 6)
 ON CONFLICT DO NOTHING;
 
--- Insert default stories
+-- Insert default site settings
+INSERT INTO public.site_content (section, content) VALUES
+    ('contact', '{
+        "address": "Magsaysay Avenue, Naga City 4400",
+        "phone": "09171271659",
+        "email": "flowertown1496@gmail.com",
+        "phoneNote": "TEXT ONLY"
+    }'),
+    ('hours', '{
+        "days": "Mon - Sun",
+        "hours": "9:00 AM - 9:00 PM"
+    }')
+ON CONFLICT (section) DO UPDATE SET content = EXCLUDED.content;
+
+-- Insert default stories (WITHOUT IMAGES - admin will add their own)
 INSERT INTO public.stories (title, cover_image, "order") VALUES
-    ('Fresh Flowers', 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=400&h=400&fit=crop', 1),
-    ('Dried Bouquets', 'https://images.unsplash.com/photo-1610146644352-43b55c2785f8?w=400&h=400&fit=crop', 2),
-    ('Vases & Gifts', 'https://images.unsplash.com/photo-1604424952485-d7f1c7e79c61?w=400&h=400&fit=crop', 3),
-    ('Custom Orders', 'https://images.unsplash.com/photo-1487070183336-b863922373d4?w=400&h=400&fit=crop', 4),
-    ('Events', 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=400&h=400&fit=crop', 5)
+    ('Fresh Flowers', '', 1),
+    ('Dried Bouquets', '', 2),
+    ('Vases & Gifts', '', 3),
+    ('Custom Orders', '', 4),
+    ('Events', '', 5)
 ON CONFLICT DO NOTHING;
 
 -- Create storage bucket for images
