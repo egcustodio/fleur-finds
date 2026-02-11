@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@/lib/supabase";
 import { Plus, Edit, Trash2, Upload, X } from "lucide-react";
+import ImageUpload from "@/components/ImageUpload";
+import { toast } from "sonner";
 
 interface Product {
   id: string;
@@ -252,23 +254,11 @@ export default function ProductsAdmin() {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Image URL
-                </label>
-                <input
-                  type="url"
-                  value={formData.image}
-                  onChange={(e) =>
-                    setFormData({ ...formData, image: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                  placeholder="https://example.com/image.jpg"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Paste an image URL or leave blank for default
-                </p>
-              </div>
+              <ImageUpload
+                currentImage={formData.image}
+                onUploadComplete={(url) => setFormData({ ...formData, image: url })}
+                folder="products"
+              />
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">

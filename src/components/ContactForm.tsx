@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send, MapPin, Phone, Mail, Clock } from "lucide-react";
+import { createBrowserClient } from "@/lib/supabase";
+import { toast } from "sonner";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -12,13 +14,33 @@ export default function ContactForm() {
     phone: "",
     message: "",
   });
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted:", formData);
-    alert("Thank you for your message! We'll get back to you soon.");
-    setFormData({ firstName: "", lastName: "", email: "", phone: "", message: "" });
+    setSubmitting(true);
+
+    try {
+      const supabase = createBrowserClient();
+      const { error } = await supabase.from("contact_inquiries").insert({
+        first_name: formData.firstName.trim(),
+        last_name: formData.lastName.trim(),
+        email: formData.email.toLowerCase().trim(),
+        phone: formData.phone.trim(),
+        message: formData.message.trim(),
+        status: "new",
+      });
+
+      if (error) throw error;
+
+      toast.success("Thank you for your message! We'll get back to you soon.");
+      setFormData({ firstName: "", lastName: "", email: "", phone: "", message: "" });
+    } catch (error) {
+      console.error("Error submitting contact form:", error);
+      toast.error("Failed to send message. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -132,10 +154,11 @@ export default function ContactForm() {
 
               <button
                 type="submit"
-                className="w-full inline-flex items-center justify-center space-x-2 bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
+                disabled={submitting}
+                className="w-full inline-flex items-center justify-center space-x-2 bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg hover:shadow-xl disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none"
               >
-                <span>Send Message</span>
-                <Send className="w-5 h-5" />
+                <span>{submitting ? "Sending..." : "Send Message"}</span>
+                {!submitting && <Send className="w-5 h-5" />}
               </button>
             </form>
           </motion.div>

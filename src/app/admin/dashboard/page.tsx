@@ -16,7 +16,10 @@ import {
   Upload,
   ShoppingBag,
   Tag,
-  Package
+  Package,
+  Star,
+  MessageSquare,
+  Mail
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -93,6 +96,27 @@ export default function AdminDashboard() {
                 >
                   <Tag className="w-5 h-5" />
                   <span className="font-medium">Promotions</span>
+                </button>
+                <button
+                  onClick={() => router.push("/admin/reviews")}
+                  className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors hover:bg-gray-100 text-gray-700"
+                >
+                  <Star className="w-5 h-5" />
+                  <span className="font-medium">Reviews</span>
+                </button>
+                <button
+                  onClick={() => router.push("/admin/inquiries")}
+                  className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors hover:bg-gray-100 text-gray-700"
+                >
+                  <MessageSquare className="w-5 h-5" />
+                  <span className="font-medium">Contact Inquiries</span>
+                </button>
+                <button
+                  onClick={() => router.push("/admin/newsletter")}
+                  className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors hover:bg-gray-100 text-gray-700"
+                >
+                  <Mail className="w-5 h-5" />
+                  <span className="font-medium">Newsletter</span>
                 </button>
                 <button
                   onClick={() => router.push("/admin/settings")}
