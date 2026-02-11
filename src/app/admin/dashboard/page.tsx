@@ -13,7 +13,9 @@ import {
   Plus,
   Edit,
   Trash2,
-  Upload
+  Upload,
+  ShoppingBag,
+  Tag
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -70,6 +72,20 @@ export default function AdminDashboard() {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm p-4">
               <nav className="space-y-2">
+                <button
+                  onClick={() => router.push("/admin/products")}
+                  className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors hover:bg-gray-100 text-gray-700"
+                >
+                  <ShoppingBag className="w-5 h-5" />
+                  <span className="font-medium">Products</span>
+                </button>
+                <button
+                  onClick={() => router.push("/admin/promos")}
+                  className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors hover:bg-gray-100 text-gray-700"
+                >
+                  <Tag className="w-5 h-5" />
+                  <span className="font-medium">Promotions</span>
+                </button>
                 <button
                   onClick={() => setActiveTab("stories")}
                   className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
