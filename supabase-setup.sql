@@ -57,12 +57,101 @@ CREATE TABLE IF NOT EXISTS public.site_content (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+-- Orders table
+CREATE TABLE IF NOT EXISTS public.orders (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    customer_name TEXT NOT NULL,
+    customer_email TEXT NOT NULL,
+    customer_phone TEXT NOT NULL,
+    delivery_address TEXT,
+    notes TEXT,
+    subtotal DECIMAL(10, 2) NOT NULL,
+    discount DECIMAL(10, 2) DEFAULT 0,
+    total DECIMAL(10, 2) NOT NULL,
+    promo_code TEXT,
+    status TEXT DEFAULT 'pending',
+    rental_start_date TIMESTAMP WITH TIME ZONE,
+    rental_end_date TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Order items table
+CREATE TABLE IF NOT EXISTS public.order_items (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    order_id UUID REFERENCES public.orders(id) ON DELETE CASCADE,
+    product_id UUID REFERENCES public.products(id),
+    product_title TEXT NOT NULL,
+    product_price DECIMAL(10, 2) NOT NULL,
+    quantity INTEGER NOT NULL,
+    subtotal DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Contact inquiries table
+CREATE TABLE IF NOT EXISTS public.contact_inquiries (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    phone TEXT,
+    message TEXT NOT NULL,
+    status TEXT DEFAULT 'new',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Newsletter subscribers table
+CREATE TABLE IF NOT EXISTS public.newsletter_subscribers (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    email TEXT NOT NULL UNIQUE,
+    name TEXT,
+    subscribed BOOLEAN DEFAULT true,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Product reviews table
+CREATE TABLE IF NOT EXISTS public.product_reviews (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    product_id UUID REFERENCES public.products(id) ON DELETE CASCADE,
+    customer_name TEXT NOT NULL,
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    comment TEXT,
+    approved BOOLEAN DEFAULT false,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Wishlists table
+CREATE TABLE IF NOT EXISTS public.wishlists (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    session_id TEXT NOT NULL,
+    product_id UUID REFERENCES public.products(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    UNIQUE(session_id, product_id)
+);
+
+-- Rental bookings table
+CREATE TABLE IF NOT EXISTS public.rental_bookings (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    product_id UUID REFERENCES public.products(id) ON DELETE CASCADE,
+    start_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    end_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    status TEXT DEFAULT 'pending',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 -- Enable Row Level Security
 ALTER TABLE public.stories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.story_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.promos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.site_content ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.order_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.contact_inquiries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.newsletter_subscribers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.product_reviews ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.wishlists ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.rental_bookings ENABLE ROW LEVEL SECURITY;
 
 -- Drop existing policies if they exist (to avoid conflicts)
 DROP POLICY IF EXISTS "Stories are viewable by everyone" ON public.stories;
@@ -75,6 +164,20 @@ DROP POLICY IF EXISTS "Authenticated users can manage story items" ON public.sto
 DROP POLICY IF EXISTS "Authenticated users can manage products" ON public.products;
 DROP POLICY IF EXISTS "Authenticated users can manage promos" ON public.promos;
 DROP POLICY IF EXISTS "Authenticated users can manage site content" ON public.site_content;
+DROP POLICY IF EXISTS "Orders are viewable by everyone" ON public.orders;
+DROP POLICY IF EXISTS "Order items are viewable by everyone" ON public.order_items;
+DROP POLICY IF EXISTS "Contact inquiries are viewable by authenticated users" ON public.contact_inquiries;
+DROP POLICY IF EXISTS "Reviews are viewable by everyone" ON public.product_reviews;
+DROP POLICY IF EXISTS "Authenticated users can manage orders" ON public.orders;
+DROP POLICY IF EXISTS "Authenticated users can manage order items" ON public.order_items;
+DROP POLICY IF EXISTS "Authenticated users can manage inquiries" ON public.contact_inquiries;
+DROP POLICY IF EXISTS "Authenticated users can manage reviews" ON public.product_reviews;
+DROP POLICY IF EXISTS "Anyone can submit inquiries" ON public.contact_inquiries;
+DROP POLICY IF EXISTS "Anyone can subscribe to newsletter" ON public.newsletter_subscribers;
+DROP POLICY IF EXISTS "Anyone can add to wishlist" ON public.wishlists;
+DROP POLICY IF EXISTS "Anyone can view wishlists" ON public.wishlists;
+DROP POLICY IF EXISTS "Rental bookings viewable by authenticated" ON public.rental_bookings;
+DROP POLICY IF EXISTS "Authenticated users can manage bookings" ON public.rental_bookings;
 
 -- Policies for public read access
 CREATE POLICY "Stories are viewable by everyone" ON public.stories
@@ -106,6 +209,57 @@ CREATE POLICY "Authenticated users can manage promos" ON public.promos
     FOR ALL USING (auth.role() = 'authenticated');
 
 CREATE POLICY "Authenticated users can manage site content" ON public.site_content
+    FOR ALL USING (auth.role() = 'authenticated');
+
+-- Orders policies
+CREATE POLICY "Orders are viewable by everyone" ON public.orders
+    FOR SELECT USING (true);
+
+CREATE POLICY "Authenticated users can manage orders" ON public.orders
+    FOR ALL USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Order items are viewable by everyone" ON public.order_items
+    FOR SELECT USING (true);
+
+CREATE POLICY "Authenticated users can manage order items" ON public.order_items
+    FOR ALL USING (auth.role() = 'authenticated');
+
+-- Contact inquiries policies
+CREATE POLICY "Anyone can submit inquiries" ON public.contact_inquiries
+    FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Authenticated users can manage inquiries" ON public.contact_inquiries
+    FOR ALL USING (auth.role() = 'authenticated');
+
+-- Newsletter policies
+CREATE POLICY "Anyone can subscribe to newsletter" ON public.newsletter_subscribers
+    FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Authenticated users can manage subscribers" ON public.newsletter_subscribers
+    FOR ALL USING (auth.role() = 'authenticated');
+
+-- Reviews policies
+CREATE POLICY "Reviews are viewable by everyone" ON public.product_reviews
+    FOR SELECT USING (approved = true OR auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated users can manage reviews" ON public.product_reviews
+    FOR ALL USING (auth.role() = 'authenticated');
+
+-- Wishlist policies
+CREATE POLICY "Anyone can view wishlists" ON public.wishlists
+    FOR SELECT USING (true);
+
+CREATE POLICY "Anyone can add to wishlist" ON public.wishlists
+    FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Anyone can remove from wishlist" ON public.wishlists
+    FOR DELETE USING (true);
+
+-- Rental bookings policies
+CREATE POLICY "Rental bookings viewable by authenticated" ON public.rental_bookings
+    FOR SELECT USING (true);
+
+CREATE POLICY "Authenticated users can manage bookings" ON public.rental_bookings
     FOR ALL USING (auth.role() = 'authenticated');
 
 -- Insert default products (WITHOUT IMAGES - admin will add their own)
