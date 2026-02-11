@@ -28,9 +28,10 @@ const features = [
 
 export default function About() {
   return (
-    <section id="about" className="py-20 bg-gradient-to-br from-gray-50 to-white">
-      <div className="container mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+    <section id="about" className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-gray-50 to-white">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
           {/* Left Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -48,22 +49,22 @@ export default function About() {
               <span className="text-xs font-light tracking-[0.3em] uppercase">Our Philosophy</span>
             </motion.div>
 
-            <h2 className="font-display text-4xl md:text-5xl font-light text-primary-900 mb-6">
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-light text-primary-900 mb-6">
               The Art of Floral Curation
             </h2>
 
-            <p className="text-base text-gray-600 mb-6 leading-relaxed font-light">
+            <p className="text-sm sm:text-base text-gray-600 mb-6 leading-relaxed font-light">
               At Fleur Finds, we believe in the transformative power of exceptional florals. Each arrangement is a carefully composed masterpiece, 
               sourced from the world&apos;s finest growers and crafted with meticulous attention to detail.
             </p>
 
-            <p className="text-base text-gray-600 mb-8 leading-relaxed font-light">
+            <p className="text-sm sm:text-base text-gray-600 mb-8 leading-relaxed font-light">
               Our bespoke service caters to discerning clients who appreciate refined aesthetics and uncompromising quality. 
               Every creation tells a story of elegance, crafted to elevate moments into lasting memories.
             </p>
 
             {/* Features Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               {features.map((feature, index) => {
                 const Icon = feature.icon;
                 return (
@@ -79,8 +80,8 @@ export default function About() {
                       <Icon className="w-5 h-5 text-primary-600" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">{feature.title}</h3>
-                      <p className="text-sm text-gray-600">{feature.description}</p>
+                      <h3 className="font-semibold text-sm sm:text-base text-gray-900 mb-1">{feature.title}</h3>
+                      <p className="text-xs sm:text-sm text-gray-600 font-light">{feature.description}</p>
                     </div>
                   </motion.div>
                 );
@@ -96,7 +97,7 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="relative flex items-center justify-center"
           >
-            <div className="relative w-full h-96 rounded-2xl overflow-hidden bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center shadow-xl">
+            <div className="relative w-full h-80 sm:h-96 rounded-2xl overflow-hidden bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center shadow-xl">
               <div className="text-center p-8">
                 <Flower2 className="w-24 h-24 text-primary-300 mx-auto mb-4" />
                 <p className="text-sm text-gray-500 tracking-wider">Gallery images can be added via admin panel</p>
@@ -106,6 +107,7 @@ export default function About() {
             {/* Decorative Element */}
             <div className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary-200/30 rounded-full blur-3xl" />
           </motion.div>
+        </div>
         </div>
       </div>
     </section>

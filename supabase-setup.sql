@@ -63,6 +63,18 @@ ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.promos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.site_content ENABLE ROW LEVEL SECURITY;
 
+-- Drop existing policies if they exist (to avoid conflicts)
+DROP POLICY IF EXISTS "Stories are viewable by everyone" ON public.stories;
+DROP POLICY IF EXISTS "Story items are viewable by everyone" ON public.story_items;
+DROP POLICY IF EXISTS "Products are viewable by everyone" ON public.products;
+DROP POLICY IF EXISTS "Active promos are viewable by everyone" ON public.promos;
+DROP POLICY IF EXISTS "Site content is viewable by everyone" ON public.site_content;
+DROP POLICY IF EXISTS "Authenticated users can manage stories" ON public.stories;
+DROP POLICY IF EXISTS "Authenticated users can manage story items" ON public.story_items;
+DROP POLICY IF EXISTS "Authenticated users can manage products" ON public.products;
+DROP POLICY IF EXISTS "Authenticated users can manage promos" ON public.promos;
+DROP POLICY IF EXISTS "Authenticated users can manage site content" ON public.site_content;
+
 -- Policies for public read access
 CREATE POLICY "Stories are viewable by everyone" ON public.stories
     FOR SELECT USING (true);

@@ -13,8 +13,8 @@ export default function Hero() {
         }} />
       </div>
 
-      <div className="container mx-auto px-4 py-20 md:py-32 relative z-10">
-        <div className="max-w-5xl mx-auto">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-32 relative z-10">
+        <div className="max-w-7xl mx-auto">
           {/* Main Content */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -72,14 +72,14 @@ export default function Hero() {
             >
               <a
                 href="#products"
-                className="group inline-flex items-center space-x-3 bg-rose-700 hover:bg-rose-800 text-white px-12 py-4 rounded-full transition-all duration-300 shadow-md hover:shadow-lg"
+                className="w-full sm:w-auto group inline-flex items-center justify-center space-x-3 bg-rose-700 hover:bg-rose-800 text-white px-8 sm:px-12 py-4 rounded-full transition-all duration-300 shadow-md hover:shadow-lg"
               >
                 <span className="text-sm tracking-[0.15em] font-light uppercase">Discover</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </a>
               <a
                 href="tel:09171271659"
-                className="inline-flex items-center space-x-3 bg-transparent hover:bg-blush-100 text-rose-700 px-12 py-4 rounded-full border border-rose-400 transition-all duration-300"
+                className="w-full sm:w-auto inline-flex items-center justify-center space-x-3 bg-transparent hover:bg-blush-100 text-rose-700 px-8 sm:px-12 py-4 rounded-full border border-rose-400 transition-all duration-300"
               >
                 <Phone className="w-4 h-4" />
                 <span className="text-sm tracking-[0.15em] font-light uppercase">Inquire</span>
