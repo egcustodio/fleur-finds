@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@/lib/supabase";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Search, Filter } from "lucide-react";
 
 interface Product {
   id: string;
@@ -13,16 +13,25 @@ interface Product {
   image: string | null;
   category: string;
   in_stock: boolean;
+  quantity: number;
   featured: boolean;
 }
 
 export default function ProductCategories() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [categories, setCategories] = useState<string[]>(["All"]);
 
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    filterProducts();
+  }, [searchQuery, selectedCategory, products]);
 
   const fetchProducts = async () => {
     try {
@@ -30,16 +39,38 @@ export default function ProductCategories() {
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        .eq('in_stock', true)
         .order('order', { ascending: true });
 
       if (error) throw error;
       setProducts(data || []);
+      
+      // Extract unique categories
+      const uniqueCategories = ["All", ...new Set(data?.map(p => p.category).filter(Boolean) as string[])];
+      setCategories(uniqueCategories);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const filterProducts = () => {
+    let filtered = products;
+
+    // Filter by category
+    if (selectedCategory !== "All") {
+      filtered = filtered.filter(p => p.category === selectedCategory);
+    }
+
+    // Filter by search query
+    if (searchQuery) {
+      filtered = filtered.filter(p =>
+        p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.description?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    setFilteredProducts(filtered);
   };
 
   return (
@@ -59,13 +90,49 @@ export default function ProductCategories() {
             </p>
           </motion.div>
 
+          {/* Search and Filter Section */}
+          <div className="mb-8 space-y-4">
+            {/* Search Bar */}
+            <div className="relative max-w-md mx-auto">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search flowers..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all"
+              />
+            </div>
+
+            {/* Category Filter */}
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide justify-center flex-wrap">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
+                    selectedCategory === category
+                      ? "bg-rose-700 text-white shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+
         {loading ? (
           <div className="text-center text-gray-500 py-12">Loading products...</div>
-        ) : products.length === 0 ? (
-          <div className="text-center text-gray-500 py-12">No products available. Please add products in the admin panel.</div>
+        ) : filteredProducts.length === 0 ? (
+          <div className="text-center text-gray-500 py-12">
+            {searchQuery || selectedCategory !== "All" 
+              ? "No products match your search criteria." 
+              : "No products available. Please add products in the admin panel."}
+          </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
-            {products.map((product, index) => (
+            {filteredProducts.map((product, index) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -92,6 +159,18 @@ export default function ProductCategories() {
                       Featured
                     </div>
                   )}
+
+                  {/* Stock Badge */}
+                  {!product.in_stock && (
+                    <div className="absolute top-4 right-4 bg-gray-800 text-white px-3 py-1 rounded-full text-xs">
+                      Out of Stock
+                    </div>
+                  )}
+                  {product.in_stock && product.quantity <= 5 && product.quantity > 0 && (
+                    <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-xs">
+                      Only {product.quantity} left
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-4 sm:p-6">
@@ -108,8 +187,15 @@ export default function ProductCategories() {
                     <span className="text-xl sm:text-2xl font-light text-rose-700">
                       ${product.price.toFixed(2)}
                     </span>
-                    <button className="w-full sm:w-auto bg-rose-700 hover:bg-rose-800 text-white px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm transition-colors duration-300">
-                      Add to Cart
+                    <button 
+                      disabled={!product.in_stock}
+                      className={`w-full sm:w-auto px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm transition-colors duration-300 ${
+                        product.in_stock
+                          ? "bg-rose-700 hover:bg-rose-800 text-white"
+                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      }`}
+                    >
+                      {product.in_stock ? "Add to Cart" : "Out of Stock"}
                     </button>
                   </div>
                 </div>
@@ -119,6 +205,16 @@ export default function ProductCategories() {
         )}
         </div>
       </div>
+
+      <style jsx global>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </section>
   );
 }

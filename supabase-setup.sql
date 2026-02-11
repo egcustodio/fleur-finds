@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS public.products (
     image TEXT,
     category TEXT,
     in_stock BOOLEAN DEFAULT true,
+    quantity INTEGER DEFAULT 0,
     featured BOOLEAN DEFAULT false,
     "order" INTEGER DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,

@@ -100,39 +100,46 @@ export default function StoriesHighlights() {
   };
 
   return (
-    <section className="py-12 bg-gradient-to-b from-white to-primary-50/30">
-      <div className="container mx-auto px-4">
-        {/* Stories Row */}
-        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-          {stories.map((story, index) => (
-            <motion.button
-              key={story.id}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.1 }}
-              onClick={() => setSelectedStory(story)}
-              className="flex flex-col items-center flex-shrink-0 group"
-            >
-              <div className="relative">
-                {/* Gradient Ring */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-accent-500 via-primary-500 to-accent-400 p-[3px] group-hover:scale-110 transition-transform">
-                  <div className="bg-white rounded-full p-1">
-                    <div className="w-20 h-20 rounded-full overflow-hidden">
-                      <img
-                        src={story.cover_image}
-                        alt={story.title}
-                        className="w-full h-full object-cover"
-                      />
+    <section className="py-12 sm:py-16 bg-gradient-to-b from-white to-primary-50/30">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Stories Row */}
+          <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-4 scrollbar-hide">
+            {stories.map((story, index) => (
+              <motion.button
+                key={story.id}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+                onClick={() => setSelectedStory(story)}
+                className="flex flex-col items-center flex-shrink-0 group"
+              >
+                <div className="relative w-24 h-24 sm:w-28 sm:h-28">
+                  {/* Gradient Ring - FIXED: Proper circular border */}
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-rose-500 via-rose-600 to-rose-400 p-[2.5px] group-hover:scale-105 transition-transform">
+                    <div className="w-full h-full bg-white rounded-full p-[3px]">
+                      <div className="w-full h-full rounded-full overflow-hidden bg-gray-100">
+                        {story.cover_image ? (
+                          <img
+                            src={story.cover_image}
+                            alt={story.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-rose-100 to-rose-200">
+                            <span className="text-2xl">📸</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <span className="mt-2 text-xs font-medium text-gray-700 max-w-[88px] text-center truncate">
-                {story.title}
-              </span>
-            </motion.button>
-          ))}
-        </div>
+                <span className="mt-2 text-xs font-medium text-gray-700 max-w-[100px] text-center truncate">
+                  {story.title}
+                </span>
+              </motion.button>
+            ))}
+          </div>
 
         {/* Story Viewer Modal */}
         <AnimatePresence>
@@ -186,12 +193,18 @@ export default function StoriesHighlights() {
                 </div>
 
                 {/* Story Image */}
-                <div className="relative w-full h-full">
-                  <img
-                    src={storyItems[currentItemIndex]?.image}
-                    alt={storyItems[currentItemIndex]?.caption || "Story"}
-                    className="w-full h-full object-cover"
-                  />
+                <div className="relative w-full h-full bg-black">
+                  {storyItems[currentItemIndex]?.image ? (
+                    <img
+                      src={storyItems[currentItemIndex].image}
+                      alt={storyItems[currentItemIndex]?.caption || "Story"}
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <p className="text-white">No image available</p>
+                    </div>
+                  )}
 
                   {/* Caption */}
                   {storyItems[currentItemIndex]?.caption && (
@@ -233,6 +246,7 @@ export default function StoriesHighlights() {
             </motion.div>
           )}
         </AnimatePresence>
+        </div>
       </div>
 
       <style jsx global>{`

@@ -12,6 +12,7 @@ interface Product {
   image: string | null;
   category: string;
   in_stock: boolean;
+  quantity: number;
   featured: boolean;
   order: number;
 }
@@ -28,6 +29,7 @@ export default function ProductsAdmin() {
     image: "",
     category: "",
     in_stock: true,
+    quantity: 0,
     featured: false,
     order: 0,
   });
@@ -64,6 +66,7 @@ export default function ProductsAdmin() {
       image: formData.image || null,
       category: formData.category,
       in_stock: formData.in_stock,
+      quantity: formData.quantity,
       featured: formData.featured,
       order: formData.order,
     };
@@ -113,6 +116,7 @@ export default function ProductsAdmin() {
       image: "",
       category: "",
       in_stock: true,
+      quantity: 0,
       featured: false,
       order: 0,
     });
@@ -129,6 +133,7 @@ export default function ProductsAdmin() {
       image: product.image || "",
       category: product.category,
       in_stock: product.in_stock,
+      quantity: product.quantity,
       featured: product.featured,
       order: product.order,
     });
@@ -216,19 +221,35 @@ export default function ProductsAdmin() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Category
+                    Quantity
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     required
-                    value={formData.category}
+                    value={formData.quantity}
                     onChange={(e) =>
-                      setFormData({ ...formData, category: e.target.value })
+                      setFormData({ ...formData, quantity: parseInt(e.target.value) || 0 })
                     }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                    placeholder="e.g., Bouquets"
+                    placeholder="10"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Category
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.category}
+                  onChange={(e) =>
+                    setFormData({ ...formData, category: e.target.value })
+                  }
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+                  placeholder="e.g., Bouquets"
+                />
               </div>
 
               <div>
@@ -345,13 +366,18 @@ export default function ProductsAdmin() {
 
               <div className="p-4">
                 <div className="flex justify-between items-start mb-2">
-                  <div>
+                  <div className="flex-1">
                     <p className="text-xs text-gray-500 uppercase tracking-wider">
                       {product.category}
                     </p>
                     <h3 className="font-display text-lg text-primary-900">
                       {product.title}
                     </h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Quantity: <span className={`font-semibold ${product.quantity <= 5 ? 'text-orange-600' : 'text-green-600'}`}>
+                        {product.quantity}
+                      </span>
+                    </p>
                   </div>
                   <span className="text-xl font-light text-rose-700">
                     ${product.price.toFixed(2)}
