@@ -1,5 +1,7 @@
 # 🎯 Feature Status & Roadmap - Fleur Finds
 
+**Last Updated:** February 12, 2025
+
 ## ✅ FULLY WORKING (Use These Now!)
 
 ### 1. **💸 Discount Code System** - COMPLETE!
@@ -64,11 +66,6 @@
 4. Update status (e.g., Pending → Confirmed → Processing → Completed)
 5. Click "Export to CSV" button to download all orders
 
-**What's Missing:**
-- ❌ Customer can't track their own orders (no customer login yet)
-- ❌ No email notifications when status changes
-- ❌ No date range filter
-
 ---
 
 ### 3. **🛒 Shopping Cart & Checkout** - COMPLETE!
@@ -88,96 +85,269 @@
 
 ---
 
-## ⏳ DATABASE READY (Just Need UI)
+### 4. **📸 Image Upload for Admin** - COMPLETE!
 
-These features have the database tables set up in your `supabase-setup.sql` file. They just need the user interface built.
+**Location:** `/admin/products`
 
-### 4. **⭐ Product Reviews & Ratings**
+**Features:**
+- ✅ Upload product images directly to Supabase Storage
+- ✅ File validation (image types only, 5MB max)
+- ✅ Image preview with remove button
+- ✅ Fallback URL input option
+- ✅ Auto-generated unique filenames
+- ✅ Public URLs returned
+- ✅ Toast notifications for success/errors
 
-**Database Status:** ✅ Table exists
-**Admin UI:** ❌ Not built
-**Customer UI:** ❌ Not built
-
-**What's in the Database:**
-```sql
-product_reviews table:
-- product_id (which product is being reviewed)
-- customer_name
-- rating (1-5 stars)
-- comment (review text)
-- approved (admin must approve before showing)
-- created_at
-```
-
-**What Needs to Be Built:**
-1. Review form on product pages (5-star rating + comment box)
-2. Submit review button
-3. Admin page at `/admin/reviews` to approve/reject reviews
-4. Display approved reviews on product pages
-5. Calculate average rating per product
-6. Show star rating on product cards
-
-**Estimated Time:** 3-4 hours
-**Priority:** HIGH (reviews increase sales by 20-30%)
+**How to Use:**
+1. Go to `/admin/products`
+2. Click "Add Product"
+3. Click the image upload area or drag & drop
+4. Select image (JPG, PNG, GIF, etc.)
+5. Image automatically uploads to Supabase
+6. Preview shown with option to remove/change
+7. Save product with image URL
 
 ---
 
-### 5. **📧 Newsletter Subscribers**
+### 5. **⭐ Product Reviews & Ratings** - COMPLETE!
 
-**Database Status:** ✅ Table exists
-**UI:** ❌ Not built
+**Location:** `/admin/reviews`
 
-**What's in the Database:**
-```sql
-newsletter_subscribers table:
-- email (unique, no duplicates)
-- name
-- subscribed (true/false for unsubscribe)
-- created_at
-```
+**Features:**
+- ✅ Customers can submit reviews with 1-5 star ratings
+- ✅ Review form with customer name + comment
+- ✅ Admin approval workflow (reviews hidden until approved)
+- ✅ Admin page to approve/reject reviews
+- ✅ Display approved reviews on product pages
+- ✅ Average rating calculation
+- ✅ Filter reviews by status (all, pending, approved)
+- ✅ Delete reviews option
 
-**What Needs to Be Built:**
-1. Newsletter signup form in footer (email + name)
-2. "Subscribe" button
-3. Toast notification on success
-4. Admin page at `/admin/newsletter` to view subscribers
-5. Export subscribers to CSV
-6. Unsubscribe link/page
+**Components Created:**
+- `ReviewForm.tsx` - Customer review submission form
+- `ProductReviews.tsx` - Display approved reviews
+- `/admin/reviews/page.tsx` - Admin approval page
+
+**How Customers Use:**
+1. View product details
+2. Scroll to review section
+3. Click interactive stars (1-5)
+4. Enter name and comment
+5. Submit review
+6. See message: "Review will appear after admin approval"
+
+**How Admin Uses:**
+1. Go to `/admin/reviews`
+2. See all pending reviews (yellow badge)
+3. Click "Approve" to show review publicly
+4. Click "Delete" to remove spam/inappropriate reviews
+5. Filter by status (all, pending, approved)
+
+**Note:** Review components created but not yet integrated into product detail pages.
+
+---
+
+### 6. **📧 Contact Form Database Connection** - COMPLETE!
+
+**Location:** Homepage contact section + `/admin/inquiries`
+
+**Features:**
+- ✅ Contact form saves to database (contact_inquiries table)
+- ✅ Admin page to view all inquiries
+- ✅ Status management (new, replied, closed)
+- ✅ Filter by status
+- ✅ Delete inquiries
+- ✅ Export to CSV
+- ✅ Click-to-action email/phone links
+- ✅ Toast notifications
+
+**How Customers Use:**
+1. Scroll to contact section on homepage
+2. Fill in: First name, Last name, Email, Phone, Message
+3. Click "Send Message"
+4. See success message
+5. Message saved to database
+
+**How Admin Uses:**
+1. Go to `/admin/inquiries`
+2. See all customer messages
+3. Click email to send reply
+4. Click phone to call customer
+5. Update status (new → replied → closed)
+6. Export to CSV for record-keeping
+
+---
+
+### 7. **� Newsletter Signup** - COMPLETE!
+
+**Location:** Footer + `/admin/newsletter`
+
+**Features:**
+- ✅ Newsletter signup form in footer
+- ✅ Email + optional name fields
+- ✅ Duplicate email prevention
+- ✅ Admin page to view subscribers
+- ✅ Stats cards (Total, Active, Unsubscribed)
+- ✅ Unsubscribe functionality
+- ✅ Export active subscribers to CSV
+- ✅ Toast notifications
+
+**How Customers Use:**
+1. Scroll to footer
+2. Enter email (and optionally name)
+3. Click "Subscribe"
+4. See success message or "already subscribed" message
+5. Subscription saved to database
+
+**How Admin Uses:**
+1. Go to `/admin/newsletter`
+2. See subscriber stats (total, active, unsubscribed)
+3. View subscriber list with emails and names
+4. Unsubscribe users if needed
+5. Export active subscribers to CSV for email campaigns
+
+---
+
+### 8. **📦 Customer Order Tracking** - COMPLETE!
+
+**Location:** `/track-order`
+
+**Features:**
+- ✅ Customers can track orders without login
+- ✅ Search by email + order ID
+- ✅ View order status with color-coded badges
+- ✅ See customer & delivery information
+- ✅ View order items and quantities
+- ✅ See rental dates if applicable
+- ✅ Order summary with discounts
+- ✅ Status messages explaining each stage
+- ✅ Contact information shown
+
+**How Customers Use:**
+1. Visit `/track-order` (link in header navigation)
+2. Enter email address used at checkout
+3. Enter order ID (first 8 characters from confirmation)
+4. Click "Track Order"
+5. See full order details and current status
+6. Contact shop if questions
+
+**Order Statuses:**
+- 🟡 **Pending** - Order received, waiting for confirmation
+- 🔵 **Confirmed** - Order confirmed, being prepared
+- 🟣 **Processing** - Order in progress
+- 🟢 **Completed** - Order delivered/picked up
+- 🔴 **Cancelled** - Order cancelled
+
+---
+
+## 💳 PAYMENT INTEGRATION GUIDE - DOCUMENTED!
+
+**Location:** `PAYMENT_SETUP.md`
+
+**What's Included:**
+- ✅ Complete PayMongo setup guide
+- ✅ PayMaya integration instructions
+- ✅ GCash setup options
+- ✅ Test card numbers for development
+- ✅ Code examples for API routes
+- ✅ Webhook configuration
+- ✅ Environment variables setup
+- ✅ Security best practices
+- ✅ Going live checklist
+- ✅ Support contacts
+
+**Payment Methods Supported:**
+- Credit/Debit Cards (Visa, Mastercard)
+- GCash (via PayMongo)
+- PayMaya
+- GrabPay
+
+**How to Implement:**
+See `PAYMENT_SETUP.md` for step-by-step instructions.
+
+---
+
+## ⏳ PENDING INTEGRATION
+
+### Product Detail Pages
+
+**Status:** Components created, needs integration
+
+**What's Ready:**
+- ✅ `ReviewForm.tsx` - Customer review submission component
+- ✅ `ProductReviews.tsx` - Display approved reviews component
+- ✅ Database tables ready
+
+**What Needs to Be Done:**
+1. Create product detail page (`/products/[id]/page.tsx`)
+2. Add ReviewForm below product info
+3. Add ProductReviews section showing approved reviews
+4. Link product cards to detail pages
 
 **Estimated Time:** 2-3 hours
-**Priority:** MEDIUM (good for marketing)
 
 ---
 
-### 6. **📬 Contact Form Database Connection**
+### Image Upload for Stories
 
-**Database Status:** ✅ Table exists
-**Contact Form:** ✅ Exists on homepage
-**Connection:** ❌ Not connected to database
+**Status:** Component ready, needs integration
 
-**What's in the Database:**
-```sql
-contact_inquiries table:
-- first_name, last_name
-- email, phone
-- message
-- status (new, replied, closed)
-- created_at
-```
+**What's Ready:**
+- ✅ `ImageUpload.tsx` component working in Products admin
+- ✅ Supabase Storage configured
 
-**What Needs to Be Built:**
-1. Connect existing contact form to database (save submissions)
-2. Admin page at `/admin/inquiries` to view messages
-3. Mark as replied/closed
-4. Export to CSV
-5. Delete spam
+**What Needs to Be Done:**
+1. Add ImageUpload to Stories admin section
+2. Replace URL input with image upload
+3. Update story cover images to use Storage
 
-**Estimated Time:** 2 hours
-**Priority:** HIGH (currently contact form doesn't save anywhere!)
+**Estimated Time:** 1 hour
 
 ---
 
-### 7. **❤️ Wishlist System**
+## 🔮 FUTURE ENHANCEMENTS
+
+### Email Notifications
+
+**What It Would Do:**
+- Send order confirmation emails to customers
+- Notify admin when new order placed
+- Send status update emails (order confirmed, completed)
+- Newsletter welcome emails
+
+**How to Implement:**
+- Use Resend.com (free tier: 100 emails/day)
+- Or SendGrid, Mailgun, AWS SES
+- Create email templates
+- Trigger emails on order creation/status change
+
+**Estimated Time:** 4-5 hours
+**Priority:** MEDIUM
+
+---
+
+### Customer Accounts & Login
+
+**What It Would Do:**
+- Customers create accounts
+- Save delivery addresses
+- View order history
+- Track all their orders
+- Save favorite products
+- Faster checkout (pre-filled info)
+
+**How to Implement:**
+- Use Supabase Auth
+- Create user profile page
+- Link orders to user IDs
+- Protected routes
+
+**Estimated Time:** 8-10 hours
+**Priority:** MEDIUM (nice to have, not essential)
+
+---
+
+### ❤️ Wishlist System
 
 **Database Status:** ✅ Table exists
 **UI:** ❌ Not built
