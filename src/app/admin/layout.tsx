@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase";
 
 export default function AdminLayout({
@@ -12,8 +12,18 @@ export default function AdminLayout({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Skip auth check for login page
+  const isLoginPage = pathname === "/admin/login";
 
   useEffect(() => {
+    // Don't check auth on login page
+    if (isLoginPage) {
+      setLoading(false);
+      return;
+    }
+
     const checkAuth = async () => {
       try {
         const supabase = createBrowserClient();
@@ -32,7 +42,12 @@ export default function AdminLayout({
     };
 
     checkAuth();
-  }, [router]);
+  }, [router, isLoginPage]);
+
+  // Show login page without auth check
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
 
   if (loading) {
     return (
