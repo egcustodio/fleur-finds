@@ -144,6 +144,12 @@ ON CONFLICT DO NOTHING;
 INSERT INTO storage.buckets (id, name, public) VALUES ('flowers', 'flowers', true)
 ON CONFLICT DO NOTHING;
 
+-- Drop existing storage policies if they exist (to avoid conflicts)
+DROP POLICY IF EXISTS "Public Access" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated users can upload" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated users can update" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated users can delete" ON storage.objects;
+
 -- Storage policies
 CREATE POLICY "Public Access" ON storage.objects FOR SELECT USING (bucket_id = 'flowers');
 CREATE POLICY "Authenticated users can upload" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'flowers' AND auth.role() = 'authenticated');
