@@ -3,9 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X, ShoppingCart, Phone } from "lucide-react";
+import CartIcon from "./CartIcon";
+import CartDrawer from "./CartDrawer";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -53,6 +56,9 @@ export default function Header() {
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
+            {/* Cart Icon */}
+            <CartIcon onClick={() => setIsCartOpen(true)} />
+            
             <a
               href="tel:09171271659"
               className="hidden sm:flex items-center space-x-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-full transition-colors"
@@ -116,6 +122,9 @@ export default function Header() {
         )}
         </div>
       </div>
+
+      {/* Cart Drawer */}
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </header>
   );
 }

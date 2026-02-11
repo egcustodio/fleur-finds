@@ -15,7 +15,8 @@ import {
   Trash2,
   Upload,
   ShoppingBag,
-  Tag
+  Tag,
+  Package
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -78,6 +79,13 @@ export default function AdminDashboard() {
                 >
                   <ShoppingBag className="w-5 h-5" />
                   <span className="font-medium">Products</span>
+                </button>
+                <button
+                  onClick={() => router.push("/admin/orders")}
+                  className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors hover:bg-gray-100 text-gray-700"
+                >
+                  <Package className="w-5 h-5" />
+                  <span className="font-medium">Orders</span>
                 </button>
                 <button
                   onClick={() => router.push("/admin/promos")}

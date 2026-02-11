@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@/lib/supabase";
 import { ShoppingCart, Search, Filter } from "lucide-react";
+import { useCart } from "@/context/CartContext";
+import { toast } from "sonner";
 
 interface Product {
   id: string;
@@ -24,6 +26,17 @@ export default function ProductCategories() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [categories, setCategories] = useState<string[]>(["All"]);
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (product: Product) => {
+    addToCart({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      image: product.image || ""
+    });
+    toast.success(`${product.title} added to cart!`);
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -188,6 +201,7 @@ export default function ProductCategories() {
                       ${product.price.toFixed(2)}
                     </span>
                     <button 
+                      onClick={() => handleAddToCart(product)}
                       disabled={!product.in_stock}
                       className={`w-full sm:w-auto px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm transition-colors duration-300 ${
                         product.in_stock
