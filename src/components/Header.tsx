@@ -52,6 +52,9 @@ export default function Header() {
             <Link href="#contact" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
               Contact
             </Link>
+            <Link href="/track-order" className="text-gray-700 hover:text-primary-600 transition-colors font-medium">
+              Track Order
+            </Link>
           </nav>
 
           {/* Right Side Actions */}
@@ -109,6 +112,13 @@ export default function Header() {
                 className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
               >
                 Contact
+              </Link>
+              <Link
+                href="/track-order"
+                onClick={() => setIsMenuOpen(false)}
+                className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
+              >
+                Track Order
               </Link>
               <a
                 href="tel:09171271659"
