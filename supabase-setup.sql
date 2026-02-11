@@ -121,7 +121,7 @@ ON CONFLICT DO NOTHING;
 -- Insert default site settings
 INSERT INTO public.site_content (section, content) VALUES
     ('contact', '{
-        "address": "Magsaysay Avenue, Naga City 4400",
+        "address": "Naga City & Pili, Camarines Sur",
         "phone": "09171271659",
         "email": "flowertown1496@gmail.com",
         "phoneNote": "TEXT ONLY"
@@ -129,6 +129,10 @@ INSERT INTO public.site_content (section, content) VALUES
     ('hours', '{
         "days": "Mon - Sun",
         "hours": "9:00 AM - 9:00 PM"
+    }'),
+    ('bio', '{
+        "tagline": "Rent • Rewear • Recreate",
+        "description": "Discover the charm of Fleur Finds"
     }')
 ON CONFLICT (section) DO UPDATE SET content = EXCLUDED.content;
 

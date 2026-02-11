@@ -44,14 +44,24 @@ export default function Hero() {
               Fleur Finds
             </motion.h1>
 
-            {/* Motto */}
+            {/* Bio Tagline */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-lg md:text-2xl text-rose-700 mb-4 max-w-2xl mx-auto leading-relaxed font-light italic"
+              className="text-lg md:text-2xl text-rose-700 mb-2 max-w-2xl mx-auto leading-relaxed font-light"
             >
-              Perfect for hearts that want to speak without words
+              Rent • Rewear • Recreate
+            </motion.p>
+
+            {/* Motto */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45, duration: 0.6 }}
+              className="text-base md:text-lg text-rose-600 mb-4 max-w-2xl mx-auto leading-relaxed font-light italic"
+            >
+              Discover the charm of Fleur Finds
             </motion.p>
 
             <motion.p
@@ -60,7 +70,7 @@ export default function Hero() {
               transition={{ delay: 0.5, duration: 0.6 }}
               className="text-sm text-gray-400 mb-12 tracking-[0.2em] uppercase"
             >
-              Bespoke · Refined · Timeless
+              Naga City & Pili, Camarines Sur
             </motion.p>
 
             {/* CTA Buttons */}
