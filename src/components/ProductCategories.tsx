@@ -175,7 +175,7 @@ export default function ProductCategories() {
               : "Collection coming soon"}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {filteredProducts.map((product, index) => (
               <motion.div
                 key={product.id}
@@ -183,112 +183,143 @@ export default function ProductCategories() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 1.2, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="group"
+                className="group relative"
               >
-                <Link href={`/product/${product.id}`} className="block">
-                  {/* Image Container - Clean Gallery Style */}
-                  <div className="relative aspect-[3/4] overflow-hidden bg-stone-50 mb-6 cursor-pointer">
-                    {product.image ? (
-                      <Image
-                        src={product.image}
-                        alt={product.title}
-                        fill
-                        className="object-cover transform group-hover:scale-105 transition-transform duration-[1.5s] ease-out"
-                        unoptimized={product.image.includes('supabase')}
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                          if (target.parentElement) {
-                            target.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center"><span class="text-8xl">🌸</span></div>';
-                          }
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-8xl">🌸</span>
+                {/* Luxury Card Container with Shadow and Border */}
+                <div className="relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 border border-stone-100 hover:border-amber-200">
+                  <Link href={`/product/${product.id}`} className="block">
+                    {/* Image Container with Gradient Overlay */}
+                    <div className="relative aspect-[4/5] overflow-hidden">
+                      {product.image ? (
+                        <Image
+                          src={product.image}
+                          alt={product.title}
+                          fill
+                          className="object-cover transform group-hover:scale-110 transition-transform duration-[2s] ease-out"
+                          unoptimized={product.image.includes('supabase')}
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            if (target.parentElement) {
+                              target.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-stone-50 to-amber-50"><span class="text-8xl">🌸</span></div>';
+                            }
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-stone-50 to-amber-50">
+                          <span className="text-8xl">🌸</span>
+                        </div>
+                      )}
+                      
+                      {/* Gradient Overlay for Better Text Visibility */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                      
+                      {/* Premium Badges */}
+                      <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
+                        {product.featured && (
+                          <div className="bg-gradient-to-r from-amber-600 to-amber-500 text-white px-3 py-1.5 rounded-full text-[9px] tracking-[0.15em] uppercase font-medium shadow-lg backdrop-blur-sm">
+                            ✨ Featured
+                          </div>
+                        )}
+                        {!product.in_stock && (
+                          <div className="ml-auto bg-stone-900/95 text-white px-3 py-1.5 rounded-full text-[9px] tracking-[0.15em] uppercase font-medium shadow-lg backdrop-blur-sm">
+                            Sold Out
+                          </div>
+                        )}
+                        {product.in_stock && product.quantity <= 5 && product.quantity > 0 && (
+                          <div className="ml-auto bg-red-600/95 text-white px-3 py-1.5 rounded-full text-[9px] tracking-[0.15em] uppercase font-medium shadow-lg backdrop-blur-sm animate-pulse">
+                            Only {product.quantity} Left
+                          </div>
+                        )}
                       </div>
-                    )}
-                    
-                    {/* Elegant Featured Badge */}
-                    {product.featured && (
-                      <div className="absolute top-4 left-4 bg-amber-800/90 text-white px-3 py-1 text-[10px] tracking-widest uppercase font-light backdrop-blur-sm">
-                        Featured
-                      </div>
-                    )}
 
-                    {/* Minimal Stock Badges */}
-                    {!product.in_stock && (
-                      <div className="absolute top-4 right-4 bg-stone-800/90 text-white px-3 py-1 text-[10px] tracking-widest uppercase font-light backdrop-blur-sm">
-                        Sold Out
+                      {/* Elegant Hover Text */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                          <span className="text-white text-sm uppercase tracking-[0.25em] font-light bg-white/20 backdrop-blur-md px-8 py-3 rounded-full border border-white/30 shadow-2xl">
+                            View Details
+                          </span>
+                        </div>
                       </div>
-                    )}
-                    {product.in_stock && product.quantity <= 5 && product.quantity > 0 && (
-                      <div className="absolute top-4 right-4 bg-amber-700/90 text-white px-3 py-1 text-[10px] tracking-widest uppercase font-light backdrop-blur-sm">
-                        {product.quantity} Left
-                      </div>
-                    )}
-
-                    {/* Elegant Hover Overlay with View Details */}
-                    <div className="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/10 transition-colors duration-700 flex items-center justify-center">
-                      <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-white text-xs uppercase tracking-[0.2em] font-light bg-white/10 backdrop-blur-sm px-6 py-3">
-                        View Details
-                      </span>
                     </div>
-                  </div>
 
-                  {/* Product Info - Minimal Typography */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] tracking-[0.2em] uppercase text-stone-400 font-light">
-                        {product.category}
-                      </span>
-                    </div>
-                    
-                    <h3 className="font-serif text-lg sm:text-xl text-stone-900 tracking-tight group-hover:text-amber-900 transition-colors duration-500">
-                      {product.title}
-                    </h3>
-                    
-                    <p className="text-xs sm:text-sm text-stone-500 line-clamp-2 font-light leading-relaxed">
-                      {product.description}
-                    </p>
-
-                    {/* Price and Action Buttons */}
-                    <div className="flex flex-col gap-3 pt-4">
+                    {/* Product Info Section */}
+                    <div className="p-5 space-y-3">
+                      {/* Category Tag */}
                       <div className="flex items-center justify-between">
-                        <span className="text-lg font-light text-stone-900">
-                          ₱{product.price.toFixed(2)}
+                        <span className="text-[9px] tracking-[0.25em] uppercase text-amber-700 font-medium bg-amber-50 px-2 py-1 rounded">
+                          {product.category}
                         </span>
                       </div>
+                      
+                      {/* Product Title */}
+                      <h3 className="font-serif text-xl text-stone-900 tracking-tight leading-tight group-hover:text-amber-900 transition-colors duration-500 min-h-[3rem]">
+                        {product.title}
+                      </h3>
+                      
+                      {/* Description */}
+                      <p className="text-sm text-stone-600 line-clamp-2 font-light leading-relaxed min-h-[2.5rem]">
+                        {product.description || "A beautiful arrangement crafted with care."}
+                      </p>
 
-                      {/* Modern Button Group */}
-                      {product.in_stock ? (
-                        <div className="flex gap-2">
-                          <button
-                            onClick={(e) => handleBuyNow(e, product)}
-                            className="flex-1 bg-amber-900 hover:bg-amber-800 text-white py-3 text-xs uppercase tracking-[0.15em] font-light transition-colors duration-300 flex items-center justify-center gap-2 group/btn"
-                          >
-                            <CreditCard className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
-                            Buy Now
-                          </button>
-                          <button
-                            onClick={(e) => handleAddToCart(e, product)}
-                            className="flex-1 bg-stone-900 hover:bg-stone-800 text-white py-3 text-xs uppercase tracking-[0.15em] font-light transition-colors duration-300 flex items-center justify-center gap-2 group/btn"
-                          >
-                            <ShoppingCart className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
-                            Add to Cart
-                          </button>
+                      {/* Price with Divider */}
+                      <div className="pt-3 border-t border-stone-100">
+                        <div className="flex items-baseline justify-between mb-4">
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-2xl font-serif text-amber-900 font-medium">₱{product.price.toFixed(2)}</span>
+                          </div>
+                          {product.featured && (
+                            <div className="flex items-center gap-1 text-amber-600">
+                              <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                              </svg>
+                              <span className="text-xs font-medium">Premium</span>
+                            </div>
+                          )}
                         </div>
-                      ) : (
-                        <button
-                          disabled
-                          className="w-full bg-stone-200 text-stone-400 py-3 text-xs uppercase tracking-[0.15em] font-light cursor-not-allowed"
-                        >
-                          Out of Stock
-                        </button>
-                      )}
+                      </div>
                     </div>
+                  </Link>
+
+                  {/* Luxury Action Buttons - Outside Link */}
+                  <div className="px-5 pb-5">
+                    {product.in_stock ? (
+                      <div className="grid grid-cols-2 gap-3">
+                        {/* Buy Now - Gradient Premium Button */}
+                        <button
+                          onClick={(e) => handleBuyNow(e, product)}
+                          className="relative overflow-hidden bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 text-white py-3.5 rounded-xl text-xs uppercase tracking-[0.15em] font-medium transition-all duration-300 shadow-md hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 group/btn"
+                        >
+                          <CreditCard className="w-4 h-4 group-hover/btn:rotate-12 transition-transform duration-300" />
+                          <span>Buy Now</span>
+                          {/* Shimmer Effect */}
+                          <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                        </button>
+                        
+                        {/* Add to Cart - Elegant Dark Button */}
+                        <button
+                          onClick={(e) => handleAddToCart(e, product)}
+                          className="relative overflow-hidden bg-stone-900 hover:bg-stone-800 text-white py-3.5 rounded-xl text-xs uppercase tracking-[0.15em] font-medium transition-all duration-300 shadow-md hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 group/btn border border-stone-800 hover:border-stone-700"
+                        >
+                          <ShoppingCart className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-300" />
+                          <span>Add to Cart</span>
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        disabled
+                        className="w-full bg-stone-100 text-stone-400 py-3.5 rounded-xl text-xs uppercase tracking-[0.15em] font-medium cursor-not-allowed border border-stone-200"
+                      >
+                        <span className="flex items-center justify-center gap-2">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                          Out of Stock
+                        </span>
+                      </button>
+                    )}
                   </div>
-                </Link>
+                </div>
               </motion.div>
             ))}
           </div>
