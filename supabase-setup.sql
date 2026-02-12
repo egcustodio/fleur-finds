@@ -173,17 +173,22 @@ DROP POLICY IF EXISTS "Authenticated users can manage products" ON public.produc
 DROP POLICY IF EXISTS "Authenticated users can manage promos" ON public.promos;
 DROP POLICY IF EXISTS "Authenticated users can manage site content" ON public.site_content;
 DROP POLICY IF EXISTS "Orders are viewable by everyone" ON public.orders;
+DROP POLICY IF EXISTS "Anyone can create orders" ON public.orders;
 DROP POLICY IF EXISTS "Order items are viewable by everyone" ON public.order_items;
+DROP POLICY IF EXISTS "Anyone can create order items" ON public.order_items;
 DROP POLICY IF EXISTS "Contact inquiries are viewable by authenticated users" ON public.contact_inquiries;
 DROP POLICY IF EXISTS "Reviews are viewable by everyone" ON public.product_reviews;
+DROP POLICY IF EXISTS "Anyone can submit reviews" ON public.product_reviews;
 DROP POLICY IF EXISTS "Authenticated users can manage orders" ON public.orders;
 DROP POLICY IF EXISTS "Authenticated users can manage order items" ON public.order_items;
 DROP POLICY IF EXISTS "Authenticated users can manage inquiries" ON public.contact_inquiries;
 DROP POLICY IF EXISTS "Authenticated users can manage reviews" ON public.product_reviews;
 DROP POLICY IF EXISTS "Anyone can submit inquiries" ON public.contact_inquiries;
 DROP POLICY IF EXISTS "Anyone can subscribe to newsletter" ON public.newsletter_subscribers;
+DROP POLICY IF EXISTS "Authenticated users can manage subscribers" ON public.newsletter_subscribers;
 DROP POLICY IF EXISTS "Anyone can add to wishlist" ON public.wishlists;
 DROP POLICY IF EXISTS "Anyone can view wishlists" ON public.wishlists;
+DROP POLICY IF EXISTS "Anyone can remove from wishlist" ON public.wishlists;
 DROP POLICY IF EXISTS "Rental bookings viewable by authenticated" ON public.rental_bookings;
 DROP POLICY IF EXISTS "Authenticated users can manage bookings" ON public.rental_bookings;
 
@@ -223,11 +228,17 @@ CREATE POLICY "Authenticated users can manage site content" ON public.site_conte
 CREATE POLICY "Orders are viewable by everyone" ON public.orders
     FOR SELECT USING (true);
 
+CREATE POLICY "Anyone can create orders" ON public.orders
+    FOR INSERT WITH CHECK (true);
+
 CREATE POLICY "Authenticated users can manage orders" ON public.orders
     FOR ALL USING (auth.role() = 'authenticated');
 
 CREATE POLICY "Order items are viewable by everyone" ON public.order_items
     FOR SELECT USING (true);
+
+CREATE POLICY "Anyone can create order items" ON public.order_items
+    FOR INSERT WITH CHECK (true);
 
 CREATE POLICY "Authenticated users can manage order items" ON public.order_items
     FOR ALL USING (auth.role() = 'authenticated');
@@ -249,6 +260,9 @@ CREATE POLICY "Authenticated users can manage subscribers" ON public.newsletter_
 -- Reviews policies
 CREATE POLICY "Reviews are viewable by everyone" ON public.product_reviews
     FOR SELECT USING (approved = true OR auth.role() = 'authenticated');
+
+CREATE POLICY "Anyone can submit reviews" ON public.product_reviews
+    FOR INSERT WITH CHECK (true);
 
 CREATE POLICY "Authenticated users can manage reviews" ON public.product_reviews
     FOR ALL USING (auth.role() = 'authenticated');
