@@ -123,7 +123,7 @@ export default function About() {
 
             {/* Features Grid - Minimal */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              {content.features.map((feature, index) => {
+              {content.features && content.features.length > 0 ? content.features.map((feature, index) => {
                 const Icon = iconMap[feature.icon] || Flower2;
                 return (
                   <motion.div
@@ -141,7 +141,63 @@ export default function About() {
                     <p className="text-xs sm:text-sm text-stone-500 font-light leading-relaxed">{feature.description}</p>
                   </motion.div>
                 );
-              })}
+              }) : (
+                // Default features if none in database
+                <>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    className="group"
+                  >
+                    <div className="mb-4">
+                      <Award className="w-6 h-6 text-stone-400 group-hover:text-amber-800 transition-colors duration-500" />
+                    </div>
+                    <h3 className="font-serif text-base sm:text-lg text-stone-900 mb-2">Premium Quality</h3>
+                    <p className="text-xs sm:text-sm text-stone-500 font-light leading-relaxed">We source the finest flowers to ensure lasting beauty and freshness</p>
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    className="group"
+                  >
+                    <div className="mb-4">
+                      <Users className="w-6 h-6 text-stone-400 group-hover:text-amber-800 transition-colors duration-500" />
+                    </div>
+                    <h3 className="font-serif text-base sm:text-lg text-stone-900 mb-2">Expert Team</h3>
+                    <p className="text-xs sm:text-sm text-stone-500 font-light leading-relaxed">Our skilled florists bring artistry and passion to every arrangement</p>
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.5, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    className="group"
+                  >
+                    <div className="mb-4">
+                      <Heart className="w-6 h-6 text-stone-400 group-hover:text-amber-800 transition-colors duration-500" />
+                    </div>
+                    <h3 className="font-serif text-base sm:text-lg text-stone-900 mb-2">Customer Focused</h3>
+                    <p className="text-xs sm:text-sm text-stone-500 font-light leading-relaxed">Dedicated to creating memorable experiences for every client</p>
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.6, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    className="group"
+                  >
+                    <div className="mb-4">
+                      <Sparkles className="w-6 h-6 text-stone-400 group-hover:text-amber-800 transition-colors duration-500" />
+                    </div>
+                    <h3 className="font-serif text-base sm:text-lg text-stone-900 mb-2">Unique Creations</h3>
+                    <p className="text-xs sm:text-sm text-stone-500 font-light leading-relaxed">Each arrangement is crafted with creativity and attention to detail</p>
+                  </motion.div>
+                </>
+              )}
             </div>
           </motion.div>
 

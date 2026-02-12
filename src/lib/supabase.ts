@@ -1,16 +1,32 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 // Get environment variables with fallbacks for build time
 const getSupabaseUrl = () => process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
 const getSupabaseAnonKey = () => process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key';
 const getSupabaseServiceKey = () => process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-key';
 
-// Client-side Supabase client
+// Singleton instance for browser client
+let browserClient: SupabaseClient | null = null;
+
+// Client-side Supabase client (singleton)
 export const createBrowserClient = () => {
-  return createSupabaseClient(
+  if (browserClient) {
+    return browserClient;
+  }
+  
+  browserClient = createSupabaseClient(
     getSupabaseUrl(),
-    getSupabaseAnonKey()
+    getSupabaseAnonKey(),
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+      }
+    }
   );
+  
+  return browserClient;
 };
 
 // Default client for server components
