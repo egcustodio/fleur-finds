@@ -72,9 +72,17 @@ CREATE TABLE IF NOT EXISTS public.orders (
     status TEXT DEFAULT 'pending',
     rental_start_date TIMESTAMP WITH TIME ZONE,
     rental_end_date TIMESTAMP WITH TIME ZONE,
+    payment_status TEXT DEFAULT 'pending',
+    payment_method TEXT,
+    payment_intent_id TEXT,
+    paymongo_payment_id TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+-- Add index for faster payment lookups
+CREATE INDEX IF NOT EXISTS idx_orders_payment_intent ON public.orders(payment_intent_id);
+CREATE INDEX IF NOT EXISTS idx_orders_paymongo_payment ON public.orders(paymongo_payment_id);
 
 -- Order items table
 CREATE TABLE IF NOT EXISTS public.order_items (

@@ -8,8 +8,8 @@ import { Package, Mail, Phone, MapPin, Calendar, Tag, ChevronDown, ChevronUp, Do
 interface Order {
   id: string;
   customer_name: string;
-  email: string;
-  phone: string;
+  customer_email: string;
+  customer_phone: string;
   delivery_address: string;
   notes: string;
   subtotal: number;
@@ -17,6 +17,9 @@ interface Order {
   total: number;
   promo_code: string | null;
   status: string;
+  payment_status: string;
+  payment_method: string | null;
+  paymongo_payment_id: string | null;
   rental_start_date: string | null;
   rental_end_date: string | null;
   created_at: string;
@@ -120,6 +123,19 @@ export default function OrdersPage() {
     }
   };
 
+  const getPaymentStatusColor = (status: string) => {
+    switch (status) {
+      case "paid":
+        return "bg-green-100 text-green-800 border-green-300";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800 border-yellow-300";
+      case "failed":
+        return "bg-red-100 text-red-800 border-red-300";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-300";
+    }
+  };
+
   const filteredOrders = statusFilter === "all" 
     ? orders 
     : orders.filter(order => order.status === statusFilter);
@@ -153,10 +169,12 @@ export default function OrdersPage() {
       order.id,
       new Date(order.created_at).toLocaleDateString(),
       order.customer_name,
-      order.email,
-      order.phone,
+      order.customer_email,
+      order.customer_phone,
       order.delivery_address || "",
       order.status,
+      order.payment_status || "pending",
+      order.payment_method || "N/A",
       order.subtotal.toFixed(2),
       order.discount.toFixed(2),
       order.total.toFixed(2),
@@ -271,6 +289,17 @@ export default function OrdersPage() {
                       {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                     </span>
 
+                    {/* Payment Status Badge */}
+                    {order.payment_status && (
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-medium border ${getPaymentStatusColor(
+                          order.payment_status
+                        )}`}
+                      >
+                        💳 {order.payment_status === "paid" ? "Paid" : order.payment_status.charAt(0).toUpperCase() + order.payment_status.slice(1)}
+                      </span>
+                    )}
+
                     {/* Expand Button */}
                     <button
                       onClick={() =>
@@ -302,11 +331,11 @@ export default function OrdersPage() {
                         </div>
                         <div className="flex items-start">
                           <Mail className="w-4 h-4 text-gray-400 mr-2 mt-0.5" />
-                          <span className="text-gray-800">{order.email}</span>
+                          <span className="text-gray-800">{order.customer_email}</span>
                         </div>
                         <div className="flex items-start">
                           <Phone className="w-4 h-4 text-gray-400 mr-2 mt-0.5" />
-                          <span className="text-gray-800">{order.phone}</span>
+                          <span className="text-gray-800">{order.customer_phone}</span>
                         </div>
                         {order.delivery_address && (
                           <div className="flex items-start">

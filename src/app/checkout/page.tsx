@@ -133,10 +133,10 @@ export default function CheckoutPage() {
 
       if (itemsError) throw itemsError;
 
-      // Clear cart and redirect
+      // Clear cart and redirect to payment page
       clearCart();
-      toast.success("Order placed successfully! We'll contact you soon.");
-      router.push("/");
+      toast.success("Order created! Choose your payment method.");
+      router.push(`/payment?order=${order.id}`);
     } catch (error) {
       console.error("Error placing order:", error);
       toast.error("Failed to place order. Please try again.");
