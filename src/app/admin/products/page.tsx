@@ -170,6 +170,53 @@ export default function ProductsAdmin() {
     setShowForm(true);
   };
 
+  const handleDeleteAll = async () => {
+    if (products.length === 0) {
+      toast.error("No products to delete");
+      return;
+    }
+
+    const confirmed = confirm(
+      `⚠️ WARNING: This will permanently delete ALL ${products.length} products!\n\nThis action CANNOT be undone.\n\nAre you absolutely sure you want to continue?`
+    );
+    
+    if (!confirmed) return;
+
+    // Double confirmation for safety
+    const doubleConfirmed = confirm(
+      "FINAL CONFIRMATION: Delete all products?\n\nClick OK to proceed with deletion."
+    );
+    
+    if (!doubleConfirmed) return;
+
+    const supabase = createBrowserClient();
+    
+    // Check if user is authenticated
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Please log in to delete products");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { error } = await supabase
+        .from("products")
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all (using a condition that matches all)
+
+      if (error) throw error;
+      
+      toast.success(`Successfully deleted all ${products.length} products!`);
+      fetchProducts();
+    } catch (error) {
+      console.error("Error deleting all products:", error);
+      toast.error("Error deleting products. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <AdminHeader 
@@ -178,14 +225,30 @@ export default function ProductsAdmin() {
       />
       <div className="container mx-auto px-6 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-serif text-stone-900">Product Catalog</h2>
-          <button
-            onClick={() => setShowForm(true)}
-            className="bg-stone-900 hover:bg-amber-900 text-white px-6 py-3 flex items-center gap-2 transition-colors duration-300 text-sm tracking-wider uppercase font-light"
-          >
-            <Plus size={18} />
-            Add Product
-          </button>
+          <div>
+            <h2 className="text-2xl font-serif text-stone-900">Product Catalog</h2>
+            {products.length > 0 && (
+              <p className="text-sm text-stone-500 mt-1">{products.length} product{products.length !== 1 ? 's' : ''} total</p>
+            )}
+          </div>
+          <div className="flex gap-3">
+            {products.length > 0 && (
+              <button
+                onClick={handleDeleteAll}
+                className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 flex items-center gap-2 transition-colors duration-300 text-sm tracking-wider uppercase font-light"
+              >
+                <Trash2 size={18} />
+                Delete All
+              </button>
+            )}
+            <button
+              onClick={() => setShowForm(true)}
+              className="bg-stone-900 hover:bg-amber-900 text-white px-6 py-3 flex items-center gap-2 transition-colors duration-300 text-sm tracking-wider uppercase font-light"
+            >
+              <Plus size={18} />
+              Add Product
+            </button>
+          </div>
         </div>
 
       {showForm && (

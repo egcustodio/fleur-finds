@@ -288,6 +288,48 @@ function StoriesManager({ stories, fetchStories }: any) {
     }
   };
 
+  const handleDeleteAllStories = async () => {
+    if (stories.length === 0) {
+      toast.error("No stories to delete");
+      return;
+    }
+
+    const confirmed = confirm(
+      `⚠️ WARNING: This will permanently delete ALL ${stories.length} Instagram stories!\n\nThis action CANNOT be undone.\n\nAre you absolutely sure you want to continue?`
+    );
+    
+    if (!confirmed) return;
+
+    // Double confirmation for safety
+    const doubleConfirmed = confirm(
+      "FINAL CONFIRMATION: Delete all stories?\n\nClick OK to proceed with deletion."
+    );
+    
+    if (!doubleConfirmed) return;
+
+    // Check if user is authenticated
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Please log in to delete stories");
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("stories")
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all
+
+      if (error) throw error;
+      
+      toast.success(`Successfully deleted all ${stories.length} stories!`);
+      fetchStories();
+    } catch (error) {
+      console.error("Error deleting all stories:", error);
+      toast.error("Error deleting stories. Please try again.");
+    }
+  };
+
   const handleEdit = (story: any) => {
     setEditingStory(story);
     setFormData({
@@ -306,14 +348,30 @@ function StoriesManager({ stories, fetchStories }: any) {
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-display text-gray-900">Instagram Stories</h2>
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="flex items-center space-x-2 bg-stone-900 hover:bg-amber-900 text-white px-4 py-2 rounded-lg transition-colors"
-        >
-          <Plus className="w-5 h-5" />
-          <span>Add Story</span>
-        </button>
+        <div>
+          <h2 className="text-2xl font-display text-gray-900">Instagram Stories</h2>
+          {stories.length > 0 && (
+            <p className="text-sm text-stone-500 mt-1">{stories.length} stor{stories.length !== 1 ? 'ies' : 'y'}</p>
+          )}
+        </div>
+        <div className="flex gap-3">
+          {stories.length > 0 && (
+            <button
+              onClick={handleDeleteAllStories}
+              className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
+            >
+              <Trash2 className="w-5 h-5" />
+              <span>Delete All</span>
+            </button>
+          )}
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center space-x-2 bg-stone-900 hover:bg-amber-900 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Add Story</span>
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
