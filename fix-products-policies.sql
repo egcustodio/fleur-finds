@@ -79,7 +79,9 @@ USING (true);
 
 -- Grant necessary permissions to authenticated role
 GRANT ALL ON public.products TO authenticated;
-GRANT USAGE ON SEQUENCE products_id_seq TO authenticated;
+
+-- Note: products table uses UUID (gen_random_uuid()), not a sequence
+-- So we don't need to grant sequence permissions
 
 -- Verify the policies were created
 SELECT 
