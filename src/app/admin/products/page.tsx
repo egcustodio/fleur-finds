@@ -78,17 +78,31 @@ export default function ProductsAdmin() {
       return;
     }
 
+    // Validate required fields
+    if (!formData.title || !formData.price) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
     const productData = {
       title: formData.title,
-      description: formData.description,
+      description: formData.description || "",
       price: parseFloat(formData.price),
       image: formData.image || null,
-      category: formData.category,
+      category: formData.category || "",
       in_stock: formData.in_stock,
-      quantity: formData.quantity,
+      quantity: parseInt(formData.quantity?.toString() || "0"),
       featured: formData.featured,
-      order: formData.order,
+      order: parseInt(formData.order?.toString() || "0"),
     };
+
+    // Validate price is a valid number
+    if (isNaN(productData.price) || productData.price <= 0) {
+      toast.error("Please enter a valid price");
+      return;
+    }
+
+    console.log("Saving product:", productData);
 
     try {
       if (editingProduct) {
@@ -97,20 +111,39 @@ export default function ProductsAdmin() {
           .update(productData)
           .eq("id", editingProduct.id);
 
-        if (error) throw error;
+        if (error) {
+          console.error("Update error details:", error);
+          throw error;
+        }
         toast.success("Product updated successfully!");
       } else {
-        const { error } = await supabase.from("products").insert([productData]);
+        const { error, data } = await supabase
+          .from("products")
+          .insert([productData])
+          .select();
 
-        if (error) throw error;
+        if (error) {
+          console.error("Insert error details:", error);
+          throw error;
+        }
+        
+        console.log("Product added successfully:", data);
         toast.success("Product added successfully!");
       }
 
       fetchProducts();
       resetForm();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving product:", error);
-      toast.error("Error saving product. Please try again.");
+      
+      // More detailed error message
+      if (error?.message) {
+        toast.error(`Error: ${error.message}`);
+      } else if (error?.code) {
+        toast.error(`Database error (${error.code}). Please check your permissions.`);
+      } else {
+        toast.error("Error saving product. Please try again.");
+      }
     }
   };
 
