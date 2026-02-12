@@ -308,6 +308,10 @@ INSERT INTO public.site_content (section, content) VALUES
         "days": "Mon - Sun",
         "hours": "9:00 AM - 9:00 PM"
     }'),
+    ('shipping', '{
+        "defaultFee": 100,
+        "freeShippingLocations": ["naga city", "pili, camarines sur"]
+    }'),
     ('bio', '{
         "tagline": "Rent • Rewear • Recreate",
         "description": "Discover the charm of Fleur Finds"

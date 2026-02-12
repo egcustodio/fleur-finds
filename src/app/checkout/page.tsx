@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase";
@@ -16,6 +16,7 @@ export default function CheckoutPage() {
   const [discount, setDiscount] = useState(0);
   const [promoApplied, setPromoApplied] = useState(false);
   const [shippingFee, setShippingFee] = useState(0);
+  const [shippingSettings, setShippingSettings] = useState<any>(null);
 
   const [formData, setFormData] = useState({
     customer_name: "",
@@ -27,16 +28,51 @@ export default function CheckoutPage() {
     rental_end_date: "",
   });
 
+  // Fetch shipping settings on mount
+  useEffect(() => {
+    fetchShippingSettings();
+  }, []);
+
+  const fetchShippingSettings = async () => {
+    try {
+      const supabase = createBrowserClient();
+      const { data } = await supabase
+        .from("site_content")
+        .select("content")
+        .eq("section", "shipping")
+        .single();
+
+      if (data) {
+        setShippingSettings(data.content);
+      } else {
+        // Default settings if not configured
+        setShippingSettings({
+          defaultFee: 100,
+          freeShippingLocations: ["naga city", "pili, camarines sur"],
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching shipping settings:", error);
+      // Use defaults on error
+      setShippingSettings({
+        defaultFee: 100,
+        freeShippingLocations: ["naga city", "pili, camarines sur"],
+      });
+    }
+  };
+
   // Calculate shipping fee based on address
   const calculateShippingFee = (address: string) => {
+    if (!shippingSettings) return 0;
+
     const lowerAddress = address.toLowerCase();
-    const isNagaCity = lowerAddress.includes("naga city") || lowerAddress.includes("naga,");
-    const isPili = lowerAddress.includes("pili") && lowerAddress.includes("camarines sur");
     
-    if (isNagaCity || isPili) {
-      return 0; // Free shipping for Naga City and Pili
-    }
-    return 100; // ₱100 shipping fee for other areas
+    // Check if address matches any free shipping location
+    const isFreeShipping = shippingSettings.freeShippingLocations.some(
+      (location: string) => lowerAddress.includes(location.toLowerCase())
+    );
+    
+    return isFreeShipping ? 0 : shippingSettings.defaultFee;
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
