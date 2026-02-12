@@ -223,6 +223,17 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-stone-200/50 mt-16 sm:mt-20 pt-8 text-center">
+          <p className="text-xs text-stone-500 mb-3 font-light">
+            Made by:{" "}
+            <a 
+              href="https://jirehdevportfolio.vercel.app" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-amber-900 hover:text-amber-700 underline underline-offset-2 transition-colors duration-300"
+            >
+              jirehdevportfolio.vercel.app
+            </a>
+          </p>
           <p className="text-xs text-stone-400 tracking-[0.2em] uppercase font-light">
             © {new Date().getFullYear()} Fleur Finds. All rights reserved.
           </p>

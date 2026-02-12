@@ -1,0 +1,32 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Modern Flower Icon -->
+  <!-- Center Circle -->
+  <circle cx="16" cy="16" r="3" fill="#D97706"/>
+  
+  <!-- Top Petal -->
+  <ellipse cx="16" cy="8" rx="3" ry="5" fill="#78350F" opacity="0.9"/>
+  
+  <!-- Top Right Petal -->
+  <ellipse cx="22" cy="10" rx="3" ry="5" fill="#78350F" opacity="0.85" transform="rotate(45 22 10)"/>
+  
+  <!-- Right Petal -->
+  <ellipse cx="24" cy="16" rx="3" ry="5" fill="#78350F" opacity="0.8" transform="rotate(90 24 16)"/>
+  
+  <!-- Bottom Right Petal -->
+  <ellipse cx="22" cy="22" rx="3" ry="5" fill="#78350F" opacity="0.75" transform="rotate(135 22 22)"/>
+  
+  <!-- Bottom Petal -->
+  <ellipse cx="16" cy="24" rx="3" ry="5" fill="#78350F" opacity="0.7" transform="rotate(180 16 24)"/>
+  
+  <!-- Bottom Left Petal -->
+  <ellipse cx="10" cy="22" rx="3" ry="5" fill="#78350F" opacity="0.75" transform="rotate(225 10 22)"/>
+  
+  <!-- Left Petal -->
+  <ellipse cx="8" cy="16" rx="3" ry="5" fill="#78350F" opacity="0.8" transform="rotate(270 8 16)"/>
+  
+  <!-- Top Left Petal -->
+  <ellipse cx="10" cy="10" rx="3" ry="5" fill="#78350F" opacity="0.85" transform="rotate(315 10 10)"/>
+  
+  <!-- Center highlight -->
+  <circle cx="15" cy="15" r="1" fill="#FCD34D" opacity="0.6"/>
+</svg>

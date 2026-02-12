@@ -24,6 +24,15 @@ export const metadata: Metadata = {
   description: "Fleur Finds offers exquisitely curated luxury flower bouquets and bespoke floral arrangements. Each piece is a masterwork of botanical artistry, crafted with the finest blooms for discerning clientele.",
   keywords: ["luxury flowers", "premium bouquet", "bespoke floral arrangements", "luxury flower delivery", "designer bouquets", "curated flowers", "elegant arrangements", "luxury gifts"],
   authors: [{ name: "Fleur Finds" }],
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: ['/favicon.svg'],
+    apple: [
+      { url: '/favicon.svg' },
+    ],
+  },
   openGraph: {
     title: "Fleur Finds - Luxury Floral Artistry",
     description: "Exquisitely curated luxury flower bouquets and bespoke arrangements for discerning clientele.",
@@ -37,6 +46,7 @@ export const metadata: Metadata = {
   },
   viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
+  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({
