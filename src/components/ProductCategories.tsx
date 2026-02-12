@@ -3,9 +3,12 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@/lib/supabase";
-import { ShoppingCart, Search, Filter } from "lucide-react";
+import { ShoppingCart, Search, Filter, CreditCard } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { toast } from "sonner";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface Product {
   id: string;
@@ -27,15 +30,31 @@ export default function ProductCategories() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [categories, setCategories] = useState<string[]>(["All"]);
   const { addToCart } = useCart();
+  const router = useRouter();
 
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = (e: React.MouseEvent, product: Product) => {
+    e.preventDefault(); // Prevent link navigation
+    e.stopPropagation();
     addToCart({
       id: product.id,
       title: product.title,
       price: product.price,
-      image: product.image || ""
+      image: product.image || null,
     });
     toast.success(`${product.title} added to cart!`);
+  };
+
+  const handleBuyNow = (e: React.MouseEvent, product: Product) => {
+    e.preventDefault(); // Prevent link navigation
+    e.stopPropagation();
+    addToCart({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      image: product.image || null,
+    });
+    toast.success(`${product.title} added to cart!`);
+    router.push("/checkout");
   };
 
   useEffect(() => {
@@ -165,78 +184,102 @@ export default function ProductCategories() {
                 transition={{ duration: 1.2, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className="group"
               >
-                {/* Image Container - Clean Gallery Style */}
-                <div className="relative aspect-[3/4] overflow-hidden bg-stone-50 mb-6">
-                  {product.image ? (
-                    <img
-                      src={product.image}
-                      alt={product.title}
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-[1.5s] ease-out"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <ShoppingCart className="w-16 h-16 text-stone-300" />
-                    </div>
-                  )}
-                  
-                  {/* Elegant Featured Badge */}
-                  {product.featured && (
-                    <div className="absolute top-4 left-4 bg-amber-800/90 text-white px-3 py-1 text-[10px] tracking-widest uppercase font-light backdrop-blur-sm">
-                      Featured
-                    </div>
-                  )}
+                <Link href={`/product/${product.id}`} className="block">
+                  {/* Image Container - Clean Gallery Style */}
+                  <div className="relative aspect-[3/4] overflow-hidden bg-stone-50 mb-6 cursor-pointer">
+                    {product.image ? (
+                      <Image
+                        src={product.image}
+                        alt={product.title}
+                        fill
+                        className="object-cover transform group-hover:scale-105 transition-transform duration-[1.5s] ease-out"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <span className="text-8xl">🌸</span>
+                      </div>
+                    )}
+                    
+                    {/* Elegant Featured Badge */}
+                    {product.featured && (
+                      <div className="absolute top-4 left-4 bg-amber-800/90 text-white px-3 py-1 text-[10px] tracking-widest uppercase font-light backdrop-blur-sm">
+                        Featured
+                      </div>
+                    )}
 
-                  {/* Minimal Stock Badges */}
-                  {!product.in_stock && (
-                    <div className="absolute top-4 right-4 bg-stone-800/90 text-white px-3 py-1 text-[10px] tracking-widest uppercase font-light backdrop-blur-sm">
-                      Sold Out
-                    </div>
-                  )}
-                  {product.in_stock && product.quantity <= 5 && product.quantity > 0 && (
-                    <div className="absolute top-4 right-4 bg-amber-700/90 text-white px-3 py-1 text-[10px] tracking-widest uppercase font-light backdrop-blur-sm">
-                      {product.quantity} Left
-                    </div>
-                  )}
+                    {/* Minimal Stock Badges */}
+                    {!product.in_stock && (
+                      <div className="absolute top-4 right-4 bg-stone-800/90 text-white px-3 py-1 text-[10px] tracking-widest uppercase font-light backdrop-blur-sm">
+                        Sold Out
+                      </div>
+                    )}
+                    {product.in_stock && product.quantity <= 5 && product.quantity > 0 && (
+                      <div className="absolute top-4 right-4 bg-amber-700/90 text-white px-3 py-1 text-[10px] tracking-widest uppercase font-light backdrop-blur-sm">
+                        {product.quantity} Left
+                      </div>
+                    )}
 
-                  {/* Elegant Hover Overlay */}
-                  <div className="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/5 transition-colors duration-700" />
-                </div>
-
-                {/* Product Info - Minimal Typography */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] tracking-[0.2em] uppercase text-stone-400 font-light">
-                      {product.category}
-                    </span>
+                    {/* Elegant Hover Overlay with View Details */}
+                    <div className="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/10 transition-colors duration-700 flex items-center justify-center">
+                      <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-white text-xs uppercase tracking-[0.2em] font-light bg-white/10 backdrop-blur-sm px-6 py-3">
+                        View Details
+                      </span>
+                    </div>
                   </div>
-                  
-                  <h3 className="font-serif text-lg sm:text-xl text-stone-900 tracking-tight group-hover:text-amber-900 transition-colors duration-500">
-                    {product.title}
-                  </h3>
-                  
-                  <p className="text-xs sm:text-sm text-stone-500 line-clamp-2 font-light leading-relaxed">
-                    {product.description}
-                  </p>
 
-                  {/* Price and Add to Cart */}
-                  <div className="flex items-center justify-between pt-4">
-                    <span className="text-base sm:text-lg font-light text-stone-900">
-                      ${product.price.toFixed(2)}
-                    </span>
+                  {/* Product Info - Minimal Typography */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] tracking-[0.2em] uppercase text-stone-400 font-light">
+                        {product.category}
+                      </span>
+                    </div>
+                    
+                    <h3 className="font-serif text-lg sm:text-xl text-stone-900 tracking-tight group-hover:text-amber-900 transition-colors duration-500">
+                      {product.title}
+                    </h3>
+                    
+                    <p className="text-xs sm:text-sm text-stone-500 line-clamp-2 font-light leading-relaxed">
+                      {product.description}
+                    </p>
 
-                    <button
-                      onClick={() => handleAddToCart(product)}
-                      disabled={!product.in_stock}
-                      className={`text-xs tracking-wider uppercase font-light pb-1 transition-all duration-500 ${
-                        product.in_stock
-                          ? "text-stone-700 hover:text-amber-900 border-b border-stone-300 hover:border-amber-900"
-                          : "text-stone-300 border-b border-stone-200 cursor-not-allowed"
-                      }`}
-                    >
-                      {product.in_stock ? "Add" : "Unavailable"}
-                    </button>
+                    {/* Price and Action Buttons */}
+                    <div className="flex flex-col gap-3 pt-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-lg font-light text-stone-900">
+                          ${product.price.toFixed(2)}
+                        </span>
+                      </div>
+
+                      {/* Modern Button Group */}
+                      {product.in_stock ? (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={(e) => handleBuyNow(e, product)}
+                            className="flex-1 bg-amber-900 hover:bg-amber-800 text-white py-3 text-xs uppercase tracking-[0.15em] font-light transition-colors duration-300 flex items-center justify-center gap-2 group/btn"
+                          >
+                            <CreditCard className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
+                            Buy Now
+                          </button>
+                          <button
+                            onClick={(e) => handleAddToCart(e, product)}
+                            className="flex-1 bg-stone-900 hover:bg-stone-800 text-white py-3 text-xs uppercase tracking-[0.15em] font-light transition-colors duration-300 flex items-center justify-center gap-2 group/btn"
+                          >
+                            <ShoppingCart className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
+                            Add to Cart
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          disabled
+                          className="w-full bg-stone-200 text-stone-400 py-3 text-xs uppercase tracking-[0.15em] font-light cursor-not-allowed"
+                        >
+                          Out of Stock
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </div>
