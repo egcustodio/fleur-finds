@@ -86,6 +86,14 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             alt={item.title}
                             fill
                             className="object-cover"
+                            unoptimized={item.image.includes('supabase')}
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              if (target.parentElement) {
+                                target.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center text-2xl">🌸</div>';
+                              }
+                            }}
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-2xl">

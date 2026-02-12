@@ -16,7 +16,16 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'static.wixstatic.com',
       },
+      {
+        protocol: 'https',
+        hostname: '**.supabase.co',
+      },
     ],
+    // Make Next.js more permissive with images
+    unoptimized: false,
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 };
 

@@ -193,6 +193,14 @@ export default function ProductCategories() {
                         alt={product.title}
                         fill
                         className="object-cover transform group-hover:scale-105 transition-transform duration-[1.5s] ease-out"
+                        unoptimized={product.image.includes('supabase')}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          if (target.parentElement) {
+                            target.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center"><span class="text-8xl">🌸</span></div>';
+                          }
+                        }}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
