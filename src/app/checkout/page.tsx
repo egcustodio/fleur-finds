@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useCart } from "@/context/CartContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase";
@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { Calendar, MapPin, Tag, ShoppingBag, CreditCard } from "lucide-react";
 import Image from "next/image";
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const { cart, cartTotal, clearCart } = useCart();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -483,5 +483,20 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mb-4"></div>
+          <p className="text-gray-600 font-medium">Loading checkout...</p>
+        </div>
+      </div>
+    }>
+      <CheckoutContent />
+    </Suspense>
   );
 }
