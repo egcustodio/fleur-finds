@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@/lib/supabase";
+import AdminHeader from "@/components/AdminHeader";
 import { toast } from "sonner";
 import { Mail, Download, UserMinus } from "lucide-react";
 
@@ -111,22 +112,19 @@ export default function NewsletterAdmin() {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-display font-light text-gray-800 mb-2">
-            Newsletter Subscribers
-          </h1>
-          <p className="text-gray-600">Manage your email subscribers</p>
+    <>
+      <AdminHeader title="Newsletter" subtitle="Manage email subscribers" />
+      <div className="container mx-auto px-6 py-8">
+        <div className="mb-8 flex items-center justify-between">
+          <h2 className="text-2xl font-serif text-stone-900">Email Subscribers</h2>
+          <button
+            onClick={exportToCSV}
+            className="flex items-center space-x-2 bg-green-700 hover:bg-green-800 text-white px-6 py-3 transition-colors duration-300 text-sm tracking-wider uppercase font-light"
+          >
+            <Download className="w-4 h-4" />
+            <span>Export CSV</span>
+          </button>
         </div>
-        <button
-          onClick={exportToCSV}
-          className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
-        >
-          <Download className="w-4 h-4" />
-          <span>Export CSV</span>
-        </button>
-      </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -231,6 +229,7 @@ export default function NewsletterAdmin() {
           </table>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

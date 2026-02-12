@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@/lib/supabase";
+import AdminHeader from "@/components/AdminHeader";
 import { Save, Phone, Mail, MapPin, Clock, Truck } from "lucide-react";
 
 interface ContactInfo {
@@ -179,8 +180,10 @@ export default function SettingsAdmin() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-display text-primary-900 mb-8">Site Settings</h1>
+    <>
+      <AdminHeader title="Site Settings" subtitle="Configure site information and shipping" />
+      <div className="container mx-auto px-6 py-8">
+        <h2 className="text-2xl font-serif text-stone-900 mb-8">Configuration</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Contact Information */}
@@ -432,6 +435,7 @@ export default function SettingsAdmin() {
           </button>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
