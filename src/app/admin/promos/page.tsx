@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@/lib/supabase";
+import AdminHeader from "@/components/AdminHeader";
 import { Plus, Edit, Trash2, X, Tag } from "lucide-react";
 
 interface Promo {

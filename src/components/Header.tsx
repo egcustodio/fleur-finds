@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import CartIcon from "./CartIcon";
 import CartDrawer from "./CartDrawer";
@@ -10,6 +11,10 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+
+  // Hide header on admin pages
+  const isAdminPage = pathname?.startsWith("/admin");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,6 +23,11 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Don't render header on admin pages
+  if (isAdminPage) {
+    return null;
+  }
 
   return (
     <header

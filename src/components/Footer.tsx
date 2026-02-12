@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Facebook, Instagram, Mail, MapPin, Phone, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@/lib/supabase";
@@ -19,6 +20,7 @@ interface OpeningHours {
 }
 
 export default function Footer() {
+  const pathname = usePathname();
   const [contact, setContact] = useState<ContactInfo>({
     address: "Magsaysay Avenue, Naga City 4400",
     phone: "09171271659",
@@ -98,6 +100,12 @@ export default function Footer() {
       setSubmittingNewsletter(false);
     }
   };
+
+  // Hide footer on admin pages
+  const isAdminPage = pathname?.startsWith("/admin");
+  if (isAdminPage) {
+    return null;
+  }
 
   return (
     <footer className="bg-gradient-to-b from-white via-stone-50/50 to-stone-50 border-t border-stone-200/50">

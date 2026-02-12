@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createBrowserClient } from "@/lib/supabase";
 import { Plus, Edit, Trash2, Upload, X } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
+import AdminHeader from "@/components/AdminHeader";
 import { toast } from "sonner";
 
 interface Product {
@@ -143,17 +144,22 @@ export default function ProductsAdmin() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-display text-primary-900">Manage Products</h1>
-        <button
-          onClick={() => setShowForm(true)}
-          className="bg-rose-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-rose-800 transition"
-        >
-          <Plus size={20} />
-          Add Product
-        </button>
-      </div>
+    <>
+      <AdminHeader 
+        title="Products" 
+        subtitle="Manage your product catalog"
+      />
+      <div className="container mx-auto px-6 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl font-serif text-stone-900">Product Catalog</h2>
+          <button
+            onClick={() => setShowForm(true)}
+            className="bg-stone-900 hover:bg-amber-900 text-white px-6 py-3 flex items-center gap-2 transition-colors duration-300 text-sm tracking-wider uppercase font-light"
+          >
+            <Plus size={18} />
+            Add Product
+          </button>
+        </div>
 
       {showForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -400,10 +406,11 @@ export default function ProductsAdmin() {
       )}
 
       {!loading && products.length === 0 && (
-        <div className="text-center py-12 text-gray-500">
-          <p className="mb-4">No products yet. Add your first product!</p>
+        <div className="text-center py-12 text-stone-500">
+          <p className="mb-4 font-light">No products yet. Add your first product!</p>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@/lib/supabase";
+import AdminHeader from "@/components/AdminHeader";
 import { toast } from "sonner";
 import { Package, Mail, Phone, MapPin, Calendar, Tag, ChevronDown, ChevronUp, Download } from "lucide-react";
 
@@ -206,27 +207,29 @@ export default function OrdersPage() {
 
   if (loading) {
     return (
-      <div className="p-6">
-        <p className="text-gray-500">Loading orders...</p>
-      </div>
+      <>
+        <AdminHeader title="Orders" subtitle="Manage customer orders" />
+        <div className="p-6">
+          <p className="text-stone-500 font-light">Loading orders...</p>
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-display font-light text-gray-800 mb-2">Orders Management</h1>
-          <p className="text-gray-600">View and manage customer orders</p>
+    <>
+      <AdminHeader title="Orders" subtitle="View and manage customer orders" />
+      <div className="container mx-auto px-6 py-8">
+        <div className="mb-8 flex items-center justify-between">
+          <h2 className="text-2xl font-serif text-stone-900">Order Management</h2>
+          <button
+            onClick={exportToCSV}
+            className="flex items-center space-x-2 bg-green-700 hover:bg-green-800 text-white px-6 py-3 transition-colors duration-300 text-sm tracking-wider uppercase font-light"
+          >
+            <Download className="w-4 h-4" />
+            <span>Export CSV</span>
+          </button>
         </div>
-        <button
-          onClick={exportToCSV}
-          className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
-        >
-          <Download className="w-4 h-4" />
-          <span>Export to CSV</span>
-        </button>
-      </div>
 
       {/* Status Filter */}
       <div className="mb-6 flex flex-wrap gap-2">
@@ -471,6 +474,7 @@ export default function OrdersPage() {
           ))}
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }
