@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@/lib/supabase";
 import AdminHeader from "@/components/AdminHeader";
-import ImageUpload from "@/components/ImageUpload";
-import { Save, Phone, Mail, MapPin, Clock, Truck, BookOpen, Award, Users, Heart, Sparkles, Image as ImageIcon, Trash2 } from "lucide-react";
+import { Save, Phone, Mail, MapPin, Clock, Truck, BookOpen, Award, Users, Heart, Sparkles, Image as ImageIcon, Trash2, Upload } from "lucide-react";
 
 interface ContactInfo {
   address: string;
@@ -90,7 +89,7 @@ export default function SettingsAdmin() {
         .eq("section", "contact")
         .single();
 
-      if (contactData) {
+      if (contactData?.content) {
         setContact(contactData.content as ContactInfo);
       }
 
@@ -101,7 +100,7 @@ export default function SettingsAdmin() {
         .eq("section", "hours")
         .single();
 
-      if (hoursData) {
+      if (hoursData?.content) {
         setHours(hoursData.content as OpeningHours);
       }
 
@@ -112,7 +111,7 @@ export default function SettingsAdmin() {
         .eq("section", "shipping")
         .single();
 
-      if (shippingData) {
+      if (shippingData?.content) {
         setShipping(shippingData.content as ShippingSettings);
       }
 
@@ -123,8 +122,12 @@ export default function SettingsAdmin() {
         .eq("section", "about")
         .single();
 
-      if (philosophyData) {
-        setPhilosophy(philosophyData.content as PhilosophyContent);
+      if (philosophyData?.content) {
+        const phContent = philosophyData.content as PhilosophyContent;
+        // Ensure features array exists and has 4 items
+        if (phContent.features && Array.isArray(phContent.features)) {
+          setPhilosophy(phContent);
+        }
       }
 
       // Fetch gallery images
@@ -134,8 +137,12 @@ export default function SettingsAdmin() {
         .eq("section", "gallery")
         .single();
 
-      if (galleryData) {
-        setGallery(galleryData.content as GalleryContent);
+      if (galleryData?.content) {
+        const galContent = galleryData.content as GalleryContent;
+        // Ensure images is an array
+        if (galContent.images && Array.isArray(galContent.images)) {
+          setGallery(galContent);
+        }
       }
     } catch (error) {
       console.error("Error fetching settings:", error);
@@ -267,6 +274,60 @@ export default function SettingsAdmin() {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleGalleryImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload an image file");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image must be less than 5MB");
+      return;
+    }
+
+    setSaving(true);
+
+    try {
+      const supabase = createBrowserClient();
+      
+      const fileExt = file.name.split(".").pop();
+      const fileName = `gallery/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+      const { data, error } = await supabase.storage
+        .from("flowers")
+        .upload(fileName, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) throw error;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("flowers")
+        .getPublicUrl(fileName);
+
+      setGallery({
+        images: [...gallery.images, publicUrl],
+      });
+
+      alert("Image uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Error uploading image");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const removeGalleryImage = (index: number) => {
+    setGallery({
+      images: gallery.images.filter((_, i) => i !== index),
+    });
   };
 
   const addLocation = () => {
@@ -683,15 +744,22 @@ export default function SettingsAdmin() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Add New Image
               </label>
-              <ImageUpload
-                currentImage=""
-                onUploadComplete={(url) => {
-                  setGallery({
-                    images: [...gallery.images, url],
-                  });
-                }}
-                folder="gallery"
-              />
+              <div className="flex items-center gap-4">
+                <label className="flex-1 cursor-pointer">
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-rose-500 transition-colors">
+                    <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-sm text-gray-600">Click to upload image</p>
+                    <p className="text-xs text-gray-400 mt-1">Max 5MB, JPG/PNG</p>
+                  </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleGalleryImageUpload}
+                    className="hidden"
+                    disabled={saving}
+                  />
+                </label>
+              </div>
             </div>
 
             {/* Current Images */}
@@ -709,11 +777,7 @@ export default function SettingsAdmin() {
                         className="w-full aspect-square object-cover rounded-lg border border-gray-200"
                       />
                       <button
-                        onClick={() => {
-                          setGallery({
-                            images: gallery.images.filter((_, i) => i !== index),
-                          });
-                        }}
+                        onClick={() => removeGalleryImage(index)}
                         className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700"
                       >
                         <Trash2 size={16} />
