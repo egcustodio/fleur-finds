@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createBrowserClient } from "@/lib/supabase";
 import AdminHeader from "@/components/AdminHeader";
 import { Plus, Edit, Trash2, X, Tag } from "lucide-react";
+import { toast } from "sonner";
 
 interface Promo {
   id: string;
@@ -41,6 +42,14 @@ export default function PromosAdmin() {
   const fetchPromos = async () => {
     try {
       const supabase = createBrowserClient();
+      
+      // Check if user is authenticated
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error("Please log in to manage promos");
+        return;
+      }
+
       const { data, error } = await supabase
         .from("promos")
         .select("*")
@@ -50,6 +59,7 @@ export default function PromosAdmin() {
       setPromos(data || []);
     } catch (error) {
       console.error("Error fetching promos:", error);
+      toast.error("Error loading promos");
     } finally {
       setLoading(false);
     }
@@ -58,6 +68,13 @@ export default function PromosAdmin() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const supabase = createBrowserClient();
+
+    // Check if user is authenticated
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Please log in to save promos");
+      return;
+    }
 
     const promoData = {
       title: formData.title,
@@ -82,17 +99,19 @@ export default function PromosAdmin() {
           .eq("id", editingPromo.id);
 
         if (error) throw error;
+        toast.success("Promo updated successfully!");
       } else {
         const { error } = await supabase.from("promos").insert([promoData]);
 
         if (error) throw error;
+        toast.success("Promo added successfully!");
       }
 
       fetchPromos();
       resetForm();
     } catch (error) {
       console.error("Error saving promo:", error);
-      alert("Error saving promo. Please try again.");
+      toast.error("Error saving promo. Please try again.");
     }
   };
 
@@ -100,14 +119,23 @@ export default function PromosAdmin() {
     if (!confirm("Are you sure you want to delete this promo?")) return;
 
     const supabase = createBrowserClient();
+    
+    // Check if user is authenticated
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Please log in to delete promos");
+      return;
+    }
+
     const { error } = await supabase.from("promos").delete().eq("id", id);
 
     if (error) {
       console.error("Error deleting promo:", error);
-      alert("Error deleting promo.");
+      toast.error("Error deleting promo");
       return;
     }
 
+    toast.success("Promo deleted successfully!");
     fetchPromos();
   };
 
@@ -143,6 +171,14 @@ export default function PromosAdmin() {
 
   const toggleActive = async (promo: Promo) => {
     const supabase = createBrowserClient();
+    
+    // Check if user is authenticated
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Please log in to toggle promos");
+      return;
+    }
+
     const { error } = await supabase
       .from("promos")
       .update({ active: !promo.active })

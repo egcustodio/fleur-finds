@@ -44,6 +44,14 @@ export default function ProductsAdmin() {
   const fetchProducts = async () => {
     try {
       const supabase = createBrowserClient();
+      
+      // Check if user is authenticated
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error("Please log in to manage products");
+        return;
+      }
+
       const { data, error } = await supabase
         .from("products")
         .select("*")
@@ -53,6 +61,7 @@ export default function ProductsAdmin() {
       setProducts(data || []);
     } catch (error) {
       console.error("Error fetching products:", error);
+      toast.error("Error loading products");
     } finally {
       setLoading(false);
     }
@@ -61,6 +70,13 @@ export default function ProductsAdmin() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const supabase = createBrowserClient();
+
+    // Check if user is authenticated
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Please log in to save products");
+      return;
+    }
 
     const productData = {
       title: formData.title,
@@ -82,17 +98,19 @@ export default function ProductsAdmin() {
           .eq("id", editingProduct.id);
 
         if (error) throw error;
+        toast.success("Product updated successfully!");
       } else {
         const { error } = await supabase.from("products").insert([productData]);
 
         if (error) throw error;
+        toast.success("Product added successfully!");
       }
 
       fetchProducts();
       resetForm();
     } catch (error) {
       console.error("Error saving product:", error);
-      alert("Error saving product. Please try again.");
+      toast.error("Error saving product. Please try again.");
     }
   };
 
@@ -100,14 +118,23 @@ export default function ProductsAdmin() {
     if (!confirm("Are you sure you want to delete this product?")) return;
 
     const supabase = createBrowserClient();
+    
+    // Check if user is authenticated
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Please log in to delete products");
+      return;
+    }
+
     const { error } = await supabase.from("products").delete().eq("id", id);
 
     if (error) {
       console.error("Error deleting product:", error);
-      alert("Error deleting product.");
+      toast.error("Error deleting product");
       return;
     }
 
+    toast.success("Product deleted successfully!");
     fetchProducts();
   };
 

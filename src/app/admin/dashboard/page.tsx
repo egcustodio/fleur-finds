@@ -35,11 +35,23 @@ export default function AdminDashboard() {
   }, []);
 
   const fetchStories = async () => {
-    const { data } = await supabase
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Please log in to view stories");
+      return;
+    }
+
+    const { data, error } = await supabase
       .from("stories")
       .select("*")
       .order("order", { ascending: true });
     
+    if (error) {
+      console.error("Error fetching stories:", error);
+      toast.error("Error loading stories");
+      return;
+    }
+
     if (data) setStories(data);
   };
 
@@ -177,6 +189,119 @@ export default function AdminDashboard() {
 // Stories Manager Component
 function StoriesManager({ stories, fetchStories }: any) {
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editingStory, setEditingStory] = useState<any>(null);
+  const [formData, setFormData] = useState({
+    title: "",
+    cover_image: "",
+    order: 0
+  });
+  const supabase = createBrowserClient();
+
+  const handleAddStory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Check if user is authenticated
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Please log in to add stories");
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("stories")
+        .insert([{
+          title: formData.title,
+          cover_image: formData.cover_image,
+          order: formData.order
+        }]);
+
+      if (error) throw error;
+      
+      toast.success("Story added successfully!");
+      setShowAddModal(false);
+      setFormData({ title: "", cover_image: "", order: 0 });
+      fetchStories();
+    } catch (error) {
+      console.error("Error adding story:", error);
+      toast.error("Error adding story. Please try again.");
+    }
+  };
+
+  const handleUpdateStory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Check if user is authenticated
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Please log in to update stories");
+      return;
+    }
+
+    if (!editingStory) return;
+
+    try {
+      const { error } = await supabase
+        .from("stories")
+        .update({
+          title: formData.title,
+          cover_image: formData.cover_image,
+          order: formData.order
+        })
+        .eq("id", editingStory.id);
+
+      if (error) throw error;
+      
+      toast.success("Story updated successfully!");
+      setEditingStory(null);
+      setFormData({ title: "", cover_image: "", order: 0 });
+      fetchStories();
+    } catch (error) {
+      console.error("Error updating story:", error);
+      toast.error("Error updating story. Please try again.");
+    }
+  };
+
+  const handleDeleteStory = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this story?")) return;
+
+    // Check if user is authenticated
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Please log in to delete stories");
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("stories")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+      
+      toast.success("Story deleted successfully!");
+      fetchStories();
+    } catch (error) {
+      console.error("Error deleting story:", error);
+      toast.error("Error deleting story");
+    }
+  };
+
+  const handleEdit = (story: any) => {
+    setEditingStory(story);
+    setFormData({
+      title: story.title,
+      cover_image: story.cover_image,
+      order: story.order
+    });
+  };
+
+  const handleCloseModal = () => {
+    setShowAddModal(false);
+    setEditingStory(null);
+    setFormData({ title: "", cover_image: "", order: 0 });
+  };
   
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
@@ -184,7 +309,7 @@ function StoriesManager({ stories, fetchStories }: any) {
         <h2 className="text-2xl font-display text-gray-900">Instagram Stories</h2>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center space-x-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center space-x-2 bg-stone-900 hover:bg-amber-900 text-white px-4 py-2 rounded-lg transition-colors"
         >
           <Plus className="w-5 h-5" />
           <span>Add Story</span>
@@ -195,25 +320,115 @@ function StoriesManager({ stories, fetchStories }: any) {
         {stories.map((story: any) => (
           <div key={story.id} className="group relative">
             <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
-              <img
-                src={story.cover_image}
-                alt={story.title}
-                className="w-full h-full object-cover"
-              />
+              {story.cover_image ? (
+                <img
+                  src={story.cover_image}
+                  alt={story.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-stone-100">
+                  <ImageIcon className="w-12 h-12 text-stone-400" />
+                </div>
+              )}
             </div>
             <p className="mt-2 text-sm font-medium text-gray-900 text-center">{story.title}</p>
             
             <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-2">
-              <button className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100">
+              <button 
+                onClick={() => handleEdit(story)}
+                className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100"
+              >
                 <Edit className="w-4 h-4 text-gray-700" />
               </button>
-              <button className="bg-white p-2 rounded-full shadow-lg hover:bg-red-50">
+              <button 
+                onClick={() => handleDeleteStory(story.id)}
+                className="bg-white p-2 rounded-full shadow-lg hover:bg-red-50"
+              >
                 <Trash2 className="w-4 h-4 text-red-600" />
               </button>
             </div>
           </div>
         ))}
       </div>
+
+      {stories.length === 0 && (
+        <div className="text-center py-12 text-stone-500">
+          <ImageIcon className="w-16 h-16 mx-auto mb-4 text-stone-300" />
+          <p className="text-lg font-light">No stories yet</p>
+          <p className="text-sm">Add your first Instagram story highlight</p>
+        </div>
+      )}
+
+      {/* Add/Edit Modal */}
+      {(showAddModal || editingStory) && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full">
+            <h3 className="text-2xl font-display text-stone-900 mb-6">
+              {editingStory ? "Edit Story" : "Add New Story"}
+            </h3>
+            
+            <form onSubmit={editingStory ? handleUpdateStory : handleAddStory} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">
+                  Story Title
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  className="w-full px-4 py-2 border border-stone-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  placeholder="e.g., Wedding Special"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">
+                  Cover Image URL
+                </label>
+                <input
+                  type="url"
+                  required
+                  value={formData.cover_image}
+                  onChange={(e) => setFormData({ ...formData, cover_image: e.target.value })}
+                  className="w-full px-4 py-2 border border-stone-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  placeholder="https://..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">
+                  Display Order
+                </label>
+                <input
+                  type="number"
+                  value={formData.order}
+                  onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
+                  className="w-full px-4 py-2 border border-stone-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  placeholder="0"
+                />
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="submit"
+                  className="flex-1 bg-stone-900 hover:bg-amber-900 text-white px-6 py-3 rounded-lg transition-colors"
+                >
+                  {editingStory ? "Update Story" : "Add Story"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
+                  className="px-6 py-3 border border-stone-300 rounded-lg hover:bg-stone-50 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
