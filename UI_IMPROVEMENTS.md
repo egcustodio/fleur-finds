@@ -76,14 +76,14 @@ manifest: '/site.webmanifest',
 
 **Text**: 
 ```
-Made by: jirehdevportfolio.vercel.app
+Made by: jirehdevportfolio.netlify.app
 © 2026 FLEUR FINDS. ALL RIGHTS RESERVED.
 ```
 
 **File Modified**: `src/components/Footer.tsx`
 
 **Link Features**:
-- Clickable: `https://jirehdevportfolio.vercel.app`
+- Clickable: `https://jirehdevportfolio.netlify.app`
 - Opens in new tab: `target="_blank"`
 - Secure: `rel="noopener noreferrer"`
 - Styled to match luxury brand
@@ -132,13 +132,13 @@ Fixed Headers: z-40
 
 ### Footer Credit Styling
 ```tsx
-<a href="https://jirehdevportfolio.vercel.app" 
+<a href="https://jirehdevportfolio.netlify.app" 
    target="_blank" 
    rel="noopener noreferrer"
    className="text-amber-900 hover:text-amber-700 
               underline underline-offset-2 
               transition-colors duration-300">
-  jirehdevportfolio.vercel.app
+  jirehdevportfolio.netlify.app
 </a>
 ```
 
@@ -186,7 +186,7 @@ Fixed Headers: z-40
 - [ ] Link is visible above copyright
 - [ ] Link is clickable
 - [ ] Opens in new tab
-- [ ] Correct URL (jirehdevportfolio.vercel.app)
+- [ ] Correct URL (jirehdevportfolio.netlify.app)
 - [ ] Hover effect works
 - [ ] Responsive on mobile
 - [ ] Maintains footer elegance

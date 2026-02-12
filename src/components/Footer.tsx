@@ -226,12 +226,12 @@ export default function Footer() {
           <p className="text-xs text-stone-500 mb-3 font-light">
             Made by:{" "}
             <a 
-              href="https://jirehdevportfolio.vercel.app" 
+              href="https://jirehdevportfolio.netlify.app" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-amber-900 hover:text-amber-700 underline underline-offset-2 transition-colors duration-300"
             >
-              jirehdevportfolio.vercel.app
+              jirehdevportfolio.netlify.app
             </a>
           </p>
           <p className="text-xs text-stone-400 tracking-[0.2em] uppercase font-light">
