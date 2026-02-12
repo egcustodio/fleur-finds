@@ -22,6 +22,7 @@ import {
   Mail
 } from "lucide-react";
 import { toast } from "sonner";
+import ImageUpload from "@/components/ImageUpload";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("stories");
@@ -443,15 +444,12 @@ function StoriesManager({ stories, fetchStories }: any) {
 
               <div>
                 <label className="block text-sm font-medium text-stone-700 mb-2">
-                  Cover Image URL
+                  Cover Image
                 </label>
-                <input
-                  type="url"
-                  required
-                  value={formData.cover_image}
-                  onChange={(e) => setFormData({ ...formData, cover_image: e.target.value })}
-                  className="w-full px-4 py-2 border border-stone-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                  placeholder="https://..."
+                <ImageUpload
+                  currentImage={formData.cover_image}
+                  onUploadComplete={(url) => setFormData({ ...formData, cover_image: url })}
+                  folder="stories"
                 />
               </div>
 
