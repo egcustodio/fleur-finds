@@ -69,8 +69,15 @@ export default function ProductDetailPage() {
 
   const handleBuyNow = () => {
     if (!product) return;
-    handleAddToCart();
-    router.push("/checkout");
+    // Store product temporarily in sessionStorage for direct checkout
+    sessionStorage.setItem('buyNowProduct', JSON.stringify({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      image: product.image,
+      quantity: selectedQuantity
+    }));
+    router.push("/checkout?buyNow=true");
   };
 
   if (loading) {
@@ -161,7 +168,7 @@ export default function ProductDetailPage() {
               </h1>
               <div className="flex items-center gap-2 mb-6">
                 <p className="text-3xl font-light text-amber-900">
-                  ${product.price.toFixed(2)}
+                  ₱{product.price.toFixed(2)}
                 </p>
                 {product.featured && (
                   <div className="flex items-center gap-1 text-amber-600">

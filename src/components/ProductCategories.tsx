@@ -47,14 +47,15 @@ export default function ProductCategories() {
   const handleBuyNow = (e: React.MouseEvent, product: Product) => {
     e.preventDefault(); // Prevent link navigation
     e.stopPropagation();
-    addToCart({
+    // Store product temporarily in sessionStorage for direct checkout
+    sessionStorage.setItem('buyNowProduct', JSON.stringify({
       id: product.id,
       title: product.title,
       price: product.price,
       image: product.image || null,
-    });
-    toast.success(`${product.title} added to cart!`);
-    router.push("/checkout");
+      quantity: 1
+    }));
+    router.push("/checkout?buyNow=true");
   };
 
   useEffect(() => {
@@ -255,7 +256,7 @@ export default function ProductCategories() {
                     <div className="flex flex-col gap-3 pt-4">
                       <div className="flex items-center justify-between">
                         <span className="text-lg font-light text-stone-900">
-                          ${product.price.toFixed(2)}
+                          ₱{product.price.toFixed(2)}
                         </span>
                       </div>
 

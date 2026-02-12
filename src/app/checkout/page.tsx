@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase";
 import { toast } from "sonner";
 import { Calendar, MapPin, Tag, ShoppingBag, CreditCard } from "lucide-react";
@@ -11,12 +11,15 @@ import Image from "next/image";
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isBuyNow = searchParams.get('buyNow') === 'true';
   const [loading, setLoading] = useState(false);
   const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [promoApplied, setPromoApplied] = useState(false);
   const [shippingFee, setShippingFee] = useState(0);
   const [shippingSettings, setShippingSettings] = useState<any>(null);
+  const [buyNowItem, setBuyNowItem] = useState<any>(null);
 
   const [formData, setFormData] = useState({
     customer_name: "",
@@ -27,6 +30,22 @@ export default function CheckoutPage() {
     rental_start_date: "",
     rental_end_date: "",
   });
+
+  // Load Buy Now product if in Buy Now mode
+  useEffect(() => {
+    if (isBuyNow) {
+      const stored = sessionStorage.getItem('buyNowProduct');
+      if (stored) {
+        setBuyNowItem(JSON.parse(stored));
+      }
+    }
+  }, [isBuyNow]);
+
+  // Use Buy Now item or cart
+  const checkoutItems = isBuyNow && buyNowItem ? [buyNowItem] : cart;
+  const checkoutTotal = isBuyNow && buyNowItem 
+    ? buyNowItem.price * buyNowItem.quantity 
+    : cartTotal;
 
   // Fetch shipping settings on mount
   useEffect(() => {
@@ -141,14 +160,14 @@ export default function CheckoutPage() {
         return;
       }
 
-      if (cart.length === 0) {
+      if (checkoutItems.length === 0) {
         toast.error("Your cart is empty");
         setLoading(false);
         return;
       }
 
       const supabase = createBrowserClient();
-      const subtotal = cartTotal;
+      const subtotal = checkoutTotal;
       const total = subtotal - discount + shippingFee;
 
       // Create order
@@ -175,7 +194,7 @@ export default function CheckoutPage() {
       if (orderError) throw orderError;
 
       // Create order items
-      const orderItems = cart.map((item) => ({
+      const orderItems = checkoutItems.map((item) => ({
         order_id: order.id,
         product_id: item.id,
         product_title: item.title,
@@ -190,8 +209,12 @@ export default function CheckoutPage() {
 
       if (itemsError) throw itemsError;
 
-      // Clear cart and redirect to payment page
-      clearCart();
+      // Clear cart or sessionStorage based on mode
+      if (isBuyNow) {
+        sessionStorage.removeItem('buyNowProduct');
+      } else {
+        clearCart();
+      }
       toast.success("Order created! Choose your payment method.");
       router.push(`/payment?order=${order.id}`);
     } catch (error) {
@@ -202,7 +225,7 @@ export default function CheckoutPage() {
     }
   };
 
-  if (cart.length === 0) {
+  if (checkoutItems.length === 0) {
     return (
       <div className="min-h-screen pt-24 pb-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -366,7 +389,7 @@ export default function CheckoutPage() {
 
               {/* Cart Items */}
               <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
-                {cart.map((item) => (
+                {checkoutItems.map((item) => (
                   <div key={item.id} className="flex space-x-3">
                     <div className="relative w-16 h-16 rounded-md overflow-hidden flex-shrink-0 bg-gray-200">
                       {item.image ? (
@@ -423,7 +446,7 @@ export default function CheckoutPage() {
               <div className="space-y-2 border-t border-gray-200 pt-4">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="font-medium">₱{cartTotal.toFixed(2)}</span>
+                  <span className="font-medium">₱{checkoutTotal.toFixed(2)}</span>
                 </div>
                 {discount > 0 && (
                   <div className="flex justify-between text-sm">
@@ -445,7 +468,7 @@ export default function CheckoutPage() {
                 )}
                 <div className="flex justify-between text-lg font-semibold border-t border-gray-200 pt-2">
                   <span>Total</span>
-                  <span className="text-primary-600">₱{(cartTotal - discount + shippingFee).toFixed(2)}</span>
+                  <span className="text-primary-600">₱{(checkoutTotal - discount + shippingFee).toFixed(2)}</span>
                 </div>
               </div>
 
