@@ -25,6 +25,7 @@ export default function ProductsAdmin() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -36,6 +37,20 @@ export default function ProductsAdmin() {
     featured: false,
     order: 0,
   });
+
+  const categories = [
+    "All",
+    "Bouquets",
+    "Customized Bouquets",
+    "Garland/Lei",
+    "Money Bouquet",
+    "Satin Bouquet",
+    "Wedding"
+  ];
+
+  const filteredProducts = selectedCategory === "All" 
+    ? products 
+    : products.filter(p => p.category === selectedCategory);
 
   useEffect(() => {
     fetchProducts();
@@ -261,7 +276,10 @@ export default function ProductsAdmin() {
           <div>
             <h2 className="text-2xl font-serif text-stone-900">Product Catalog</h2>
             {products.length > 0 && (
-              <p className="text-sm text-stone-500 mt-1">{products.length} product{products.length !== 1 ? 's' : ''} total</p>
+              <p className="text-sm text-stone-500 mt-1">
+                {filteredProducts.length} of {products.length} product{products.length !== 1 ? 's' : ''} 
+                {selectedCategory !== "All" && ` in ${selectedCategory}`}
+              </p>
             )}
           </div>
           <div className="flex gap-3">
@@ -283,6 +301,35 @@ export default function ProductsAdmin() {
             </button>
           </div>
         </div>
+
+        {/* Category Filter */}
+        {products.length > 0 && (
+          <div className="mb-6">
+            <div className="flex items-center gap-3 flex-wrap">
+              <span className="text-sm font-medium text-stone-700">Filter by Category:</span>
+              <div className="flex gap-2 flex-wrap">
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                      selectedCategory === category
+                        ? "bg-amber-600 text-white shadow-md"
+                        : "bg-stone-100 text-stone-700 hover:bg-stone-200"
+                    }`}
+                  >
+                    {category}
+                    {category !== "All" && (
+                      <span className="ml-2 text-xs opacity-75">
+                        ({products.filter(p => p.category === category).length})
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
       {showForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -371,16 +418,22 @@ export default function ProductsAdmin() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Category
                 </label>
-                <input
-                  type="text"
+                <select
                   required
                   value={formData.category}
                   onChange={(e) =>
                     setFormData({ ...formData, category: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                  placeholder="e.g., Bouquets"
-                />
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent bg-white"
+                >
+                  <option value="">Select a category...</option>
+                  <option value="Bouquets">Bouquets</option>
+                  <option value="Customized Bouquets">Customized Bouquets</option>
+                  <option value="Garland/Lei">Garland/Lei</option>
+                  <option value="Money Bouquet">Money Bouquet</option>
+                  <option value="Satin Bouquet">Satin Bouquet</option>
+                  <option value="Wedding">Wedding</option>
+                </select>
               </div>
 
               <ImageUpload
@@ -454,7 +507,7 @@ export default function ProductsAdmin() {
         <div className="text-center py-12">Loading products...</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <div
               key={product.id}
               className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
@@ -528,9 +581,13 @@ export default function ProductsAdmin() {
         </div>
       )}
 
-      {!loading && products.length === 0 && (
+      {!loading && filteredProducts.length === 0 && (
         <div className="text-center py-12 text-stone-500">
-          <p className="mb-4 font-light">No products yet. Add your first product!</p>
+          {products.length === 0 ? (
+            <p className="mb-4 font-light">No products yet. Add your first product!</p>
+          ) : (
+            <p className="mb-4 font-light">No products found in "{selectedCategory}" category.</p>
+          )}
         </div>
       )}
       </div>
