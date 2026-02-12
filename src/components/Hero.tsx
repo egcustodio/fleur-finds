@@ -2,8 +2,37 @@
 
 import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
+import { useEffect, useState } from "react";
+import { createBrowserClient } from "@/lib/supabase";
 
 export default function Hero() {
+  const [content, setContent] = useState({
+    title: "Fleur Finds",
+    subtitle: "Curated Florals & Timeless Elegance",
+    tagline: "Est. 2024"
+  });
+
+  useEffect(() => {
+    fetchContent();
+  }, []);
+
+  const fetchContent = async () => {
+    try {
+      const supabase = createBrowserClient();
+      const { data } = await supabase
+        .from("site_content")
+        .select("content")
+        .eq("section", "hero")
+        .single();
+
+      if (data?.content) {
+        setContent(data.content);
+      }
+    } catch (error) {
+      console.error("Error fetching hero content:", error);
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-stone-50 via-amber-50/30 to-white">
       {/* Elegant Background Overlay */}
@@ -25,7 +54,7 @@ export default function Hero() {
               transition={{ delay: 0.3, duration: 1 }}
             >
               <p className="text-xs tracking-[0.3em] uppercase text-amber-800/60 font-light mb-3">
-                Est. 2024
+                {content.tagline}
               </p>
               <div className="w-12 h-px bg-gradient-to-r from-transparent via-amber-600/40 to-transparent mx-auto" />
             </motion.div>
@@ -38,10 +67,10 @@ export default function Hero() {
               className="space-y-4"
             >
               <h1 className="font-serif text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-stone-900 tracking-tight leading-none">
-                Fleur Finds
+                {content.title}
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl text-stone-600 font-light tracking-wide max-w-3xl mx-auto">
-                Curated Florals & Timeless Elegance
+                {content.subtitle}
               </p>
             </motion.div>
 

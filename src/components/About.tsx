@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Award, Users, Heart, Sparkles, Flower2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { createBrowserClient } from "@/lib/supabase";
 
 const features = [
   {
@@ -27,6 +29,33 @@ const features = [
 ];
 
 export default function About() {
+  const [content, setContent] = useState({
+    title: "The Art of Floral Curation",
+    description1: "At Fleur Finds, we believe in the transformative power of exceptional florals. Each arrangement is a carefully composed masterpiece, sourced from the world's finest growers and crafted with meticulous attention to detail.",
+    description2: "Our bespoke service caters to discerning clients who appreciate refined aesthetics and uncompromising quality. Every creation tells a story of elegance, crafted to elevate moments into lasting memories."
+  });
+
+  useEffect(() => {
+    fetchContent();
+  }, []);
+
+  const fetchContent = async () => {
+    try {
+      const supabase = createBrowserClient();
+      const { data } = await supabase
+        .from("site_content")
+        .select("content")
+        .eq("section", "about")
+        .single();
+
+      if (data?.content) {
+        setContent(data.content);
+      }
+    } catch (error) {
+      console.error("Error fetching about content:", error);
+    }
+  };
+
   return (
     <section id="about" className="py-20 sm:py-28 lg:py-32 bg-white">
       <div className="w-full px-6 sm:px-8 lg:px-12">
@@ -53,17 +82,15 @@ export default function About() {
             </motion.div>
 
             <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-stone-900 mb-8 tracking-tight leading-tight">
-              The Art of Floral Curation
+              {content.title}
             </h2>
 
             <p className="text-sm sm:text-base text-stone-600 mb-6 leading-relaxed font-light">
-              At Fleur Finds, we believe in the transformative power of exceptional florals. Each arrangement is a carefully composed masterpiece, 
-              sourced from the world&apos;s finest growers and crafted with meticulous attention to detail.
+              {content.description1}
             </p>
 
             <p className="text-sm sm:text-base text-stone-600 mb-12 leading-relaxed font-light">
-              Our bespoke service caters to discerning clients who appreciate refined aesthetics and uncompromising quality. 
-              Every creation tells a story of elegance, crafted to elevate moments into lasting memories.
+              {content.description2}
             </p>
 
             {/* Features Grid - Minimal */}
