@@ -10,6 +10,7 @@ interface PaymentMethodSelectorProps {
   amount: number;
   customerName: string;
   customerEmail: string;
+  paymentAmountType: "50%" | "full";
 }
 
 export default function PaymentMethodSelector({
@@ -17,6 +18,7 @@ export default function PaymentMethodSelector({
   amount,
   customerName,
   customerEmail,
+  paymentAmountType,
 }: PaymentMethodSelectorProps) {
   const [processing, setProcessing] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<string>("");
@@ -77,7 +79,7 @@ export default function PaymentMethodSelector({
         throw new Error(data.error || "Payment creation failed");
       }
 
-      // Update order with payment intent ID
+      // Update order with payment intent ID and payment amount type
       const { createBrowserClient } = await import("@/lib/supabase");
       const supabase = createBrowserClient();
       
@@ -86,6 +88,7 @@ export default function PaymentMethodSelector({
         .update({ 
           payment_intent_id: data.paymentIntentId,
           payment_method: selectedMethod,
+          payment_amount_type: paymentAmountType,
         })
         .eq("id", orderId);
 
@@ -142,11 +145,18 @@ export default function PaymentMethodSelector({
 
       <div className="bg-gray-50 p-4 rounded-lg">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-gray-600">Order Total:</span>
+          <span className="text-gray-600">
+            {paymentAmountType === "50%" ? "Down Payment (50%):" : "Full Payment:"}
+          </span>
           <span className="text-2xl font-bold text-primary-600">
             ₱{amount.toFixed(2)}
           </span>
         </div>
+        {paymentAmountType === "50%" && (
+          <p className="text-xs text-orange-600 mb-2">
+            Remaining balance: ₱{amount.toFixed(2)} - to be paid later
+          </p>
+        )}
         <p className="text-xs text-gray-500">
           You will be redirected to a secure payment page
         </p>

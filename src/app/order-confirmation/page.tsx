@@ -153,10 +153,35 @@ export default function OrderConfirmationPage() {
                 <span className="font-medium">-₱{order.discount.toFixed(2)}</span>
               </div>
             )}
+            {order.shipping_fee > 0 && (
+              <div className="flex justify-between">
+                <span className="text-gray-600">Shipping Fee:</span>
+                <span className="font-medium">₱{order.shipping_fee.toFixed(2)}</span>
+              </div>
+            )}
+            {order.shipping_fee === 0 && (
+              <div className="flex justify-between text-green-600">
+                <span>Shipping Fee:</span>
+                <span className="font-medium">FREE 🎉</span>
+              </div>
+            )}
             <div className="flex justify-between text-lg font-semibold border-t border-gray-200 pt-2">
               <span>Total:</span>
               <span className="text-primary-600">₱{order.total.toFixed(2)}</span>
             </div>
+            {order.payment_amount_type === "50%" && (
+              <div className="mt-4 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                <p className="text-sm font-semibold text-orange-800 mb-1">
+                  💰 Payment Status: 50% Down Payment
+                </p>
+                <p className="text-sm text-orange-700">
+                  Paid: ₱{(order.total * 0.5).toFixed(2)} | Remaining Balance: ₱{(order.total * 0.5).toFixed(2)}
+                </p>
+                <p className="text-xs text-orange-600 mt-2">
+                  Please pay the remaining balance before or upon delivery.
+                </p>
+              </div>
+            )}
           </div>
         </div>
 

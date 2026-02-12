@@ -15,6 +15,7 @@ export default function CheckoutPage() {
   const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [promoApplied, setPromoApplied] = useState(false);
+  const [shippingFee, setShippingFee] = useState(0);
 
   const [formData, setFormData] = useState({
     customer_name: "",
@@ -26,11 +27,30 @@ export default function CheckoutPage() {
     rental_end_date: "",
   });
 
+  // Calculate shipping fee based on address
+  const calculateShippingFee = (address: string) => {
+    const lowerAddress = address.toLowerCase();
+    const isNagaCity = lowerAddress.includes("naga city") || lowerAddress.includes("naga,");
+    const isPili = lowerAddress.includes("pili") && lowerAddress.includes("camarines sur");
+    
+    if (isNagaCity || isPili) {
+      return 0; // Free shipping for Naga City and Pili
+    }
+    return 100; // ₱100 shipping fee for other areas
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
+    const newFormData = {
       ...formData,
       [e.target.name]: e.target.value,
-    });
+    };
+    setFormData(newFormData);
+
+    // Update shipping fee when delivery address changes
+    if (e.target.name === "delivery_address") {
+      const newShippingFee = calculateShippingFee(e.target.value);
+      setShippingFee(newShippingFee);
+    }
   };
 
   const applyPromoCode = async () => {
@@ -93,7 +113,7 @@ export default function CheckoutPage() {
 
       const supabase = createBrowserClient();
       const subtotal = cartTotal;
-      const total = subtotal - discount;
+      const total = subtotal - discount + shippingFee;
 
       // Create order
       const { data: order, error: orderError } = await supabase
@@ -106,6 +126,7 @@ export default function CheckoutPage() {
           notes: formData.notes.trim(),
           subtotal: subtotal,
           discount: discount,
+          shipping_fee: shippingFee,
           total: total,
           promo_code: promoApplied ? promoCode.toUpperCase() : null,
           status: "pending",
@@ -374,16 +395,28 @@ export default function CheckoutPage() {
                     <span className="font-medium text-green-600">-₱{discount.toFixed(2)}</span>
                   </div>
                 )}
+                {shippingFee > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Shipping Fee</span>
+                    <span className="font-medium">₱{shippingFee.toFixed(2)}</span>
+                  </div>
+                )}
+                {shippingFee === 0 && formData.delivery_address && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-green-600">Shipping Fee</span>
+                    <span className="font-medium text-green-600">FREE 🎉</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-lg font-semibold border-t border-gray-200 pt-2">
                   <span>Total</span>
-                  <span className="text-primary-600">₱{(cartTotal - discount).toFixed(2)}</span>
+                  <span className="text-primary-600">₱{(cartTotal - discount + shippingFee).toFixed(2)}</span>
                 </div>
               </div>
 
               {/* Payment Info */}
               <div className="mt-6 p-4 bg-blue-50 rounded-lg">
                 <p className="text-xs text-blue-800">
-                  <strong>Payment:</strong> We'll contact you via phone/email to arrange payment and delivery details.
+                  <strong>Note:</strong> Minimum 50% down payment required. No COD available.
                 </p>
               </div>
             </div>

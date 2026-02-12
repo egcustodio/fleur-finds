@@ -14,6 +14,7 @@ export default function PaymentPage() {
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [paymentMode, setPaymentMode] = useState<"manual" | "online">("online");
+  const [paymentAmountType, setPaymentAmountType] = useState<"50%" | "full">("full");
 
   useEffect(() => {
     if (!orderId) {
@@ -49,6 +50,13 @@ export default function PaymentPage() {
 
   const handleManualPayment = () => {
     router.push(`/order-confirmation?order=${orderId}`);
+  };
+
+  const getPaymentAmount = () => {
+    if (paymentAmountType === "50%") {
+      return order.total * 0.5; // 50% down payment
+    }
+    return order.total; // Full payment
   };
 
   if (loading) {
@@ -133,9 +141,9 @@ export default function PaymentPage() {
                   )}
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-800">Pay Later</p>
+                  <p className="font-semibold text-gray-800">Coordinate Payment</p>
                   <p className="text-sm text-gray-600 mt-1">
-                    We'll contact you to arrange payment (Bank transfer, Cash on delivery)
+                    We'll contact you to arrange payment (Bank transfer only - No COD)
                   </p>
                   <p className="text-xs text-blue-600 mt-2">
                     ✓ Flexible payment options
@@ -145,14 +153,81 @@ export default function PaymentPage() {
             </button>
           </div>
 
+          {/* Payment Amount Selection - Only show for online payments */}
+          {paymentMode === "online" && (
+            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              <h3 className="text-sm font-semibold text-gray-800 mb-3">
+                Select Payment Amount
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <button
+                  onClick={() => setPaymentAmountType("50%")}
+                  className={`p-3 border-2 rounded-lg text-left transition-all ${
+                    paymentAmountType === "50%"
+                      ? "border-primary-600 bg-white"
+                      : "border-gray-300 hover:border-primary-400"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-gray-800">50% Down Payment</p>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Pay ₱{(order.total * 0.5).toFixed(2)} now
+                      </p>
+                      <p className="text-xs text-orange-600 mt-1">
+                        Balance: ₱{(order.total * 0.5).toFixed(2)} - Pay later
+                      </p>
+                    </div>
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                      paymentAmountType === "50%" ? "border-primary-600" : "border-gray-300"
+                    }`}>
+                      {paymentAmountType === "50%" && (
+                        <div className="w-3 h-3 bg-primary-600 rounded-full" />
+                      )}
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => setPaymentAmountType("full")}
+                  className={`p-3 border-2 rounded-lg text-left transition-all ${
+                    paymentAmountType === "full"
+                      ? "border-primary-600 bg-white"
+                      : "border-gray-300 hover:border-primary-400"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-gray-800">Full Payment</p>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Pay ₱{order.total.toFixed(2)} now
+                      </p>
+                      <p className="text-xs text-green-600 mt-1">
+                        ✓ Complete payment • No balance
+                      </p>
+                    </div>
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                      paymentAmountType === "full" ? "border-primary-600" : "border-gray-300"
+                    }`}>
+                      {paymentAmountType === "full" && (
+                        <div className="w-3 h-3 bg-primary-600 rounded-full" />
+                      )}
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Online Payment Section */}
           {paymentMode === "online" && (
             <div className="border-t border-gray-200 pt-6">
               <PaymentMethodSelector
                 orderId={orderId!}
-                amount={order.total}
+                amount={getPaymentAmount()}
                 customerName={order.customer_name}
                 customerEmail={order.customer_email}
+                paymentAmountType={paymentAmountType}
               />
             </div>
           )}
@@ -167,8 +242,19 @@ export default function PaymentPage() {
                 <ul className="text-sm text-blue-700 space-y-1 ml-4 list-disc">
                   <li>We'll contact you via phone or email within 24 hours</li>
                   <li>Confirm your order details and delivery address</li>
-                  <li>Arrange payment method (Bank transfer or Cash on delivery)</li>
+                  <li>Arrange payment via bank transfer (Minimum 50% down payment required)</li>
                   <li>Schedule delivery or pickup</li>
+                </ul>
+              </div>
+
+              <div className="bg-yellow-50 p-4 rounded-lg mb-4 border border-yellow-200">
+                <p className="text-sm text-yellow-800 font-semibold mb-1">
+                  ⚠️ Important Payment Policy
+                </p>
+                <ul className="text-sm text-yellow-700 space-y-1 ml-4 list-disc">
+                  <li>Cash on Delivery (COD) is NOT available</li>
+                  <li>Minimum 50% down payment required before processing</li>
+                  <li>Balance can be paid upon delivery or pickup</li>
                 </ul>
               </div>
 
@@ -205,6 +291,18 @@ export default function PaymentPage() {
               <div className="flex justify-between text-green-600">
                 <span>Discount {order.promo_code && `(${order.promo_code})`}:</span>
                 <span className="font-medium">-₱{order.discount.toFixed(2)}</span>
+              </div>
+            )}
+            {order.shipping_fee > 0 && (
+              <div className="flex justify-between">
+                <span className="text-gray-600">Shipping Fee:</span>
+                <span className="font-medium">₱{order.shipping_fee.toFixed(2)}</span>
+              </div>
+            )}
+            {order.shipping_fee === 0 && (
+              <div className="flex justify-between text-green-600">
+                <span>Shipping Fee:</span>
+                <span className="font-medium">FREE 🎉</span>
               </div>
             )}
             <div className="flex justify-between text-lg font-semibold border-t border-gray-200 pt-2">
