@@ -157,19 +157,21 @@ export default function PromosAdmin() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-display text-primary-900">
-          Manage Promotions
-        </h1>
-        <button
-          onClick={() => setShowForm(true)}
-          className="bg-rose-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-rose-800 transition"
-        >
-          <Plus size={20} />
-          Add Promo
-        </button>
-      </div>
+    <>
+      <AdminHeader title="Promotions" subtitle="Manage promo codes and discounts" />
+      <div className="container mx-auto px-6 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl font-serif text-stone-900">
+            Promo Codes
+          </h2>
+          <button
+            onClick={() => setShowForm(true)}
+            className="bg-stone-900 hover:bg-amber-900 text-white px-6 py-3 flex items-center gap-2 transition-colors duration-300 text-sm tracking-wider uppercase font-light"
+          >
+            <Plus size={18} />
+            Add Promo
+          </button>
+        </div>
 
       {showForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -447,10 +449,11 @@ export default function PromosAdmin() {
       )}
 
       {!loading && promos.length === 0 && (
-        <div className="text-center py-12 text-gray-500">
-          <p className="mb-4">No promotions yet. Add your first promo!</p>
+        <div className="text-center py-12 text-stone-500">
+          <p className="mb-4 font-light">No promotions yet. Add your first promo!</p>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

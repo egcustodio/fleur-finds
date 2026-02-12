@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@/lib/supabase";
+import AdminHeader from "@/components/AdminHeader";
 import { toast } from "sonner";
 import { Star, Check, X, ThumbsUp } from "lucide-react";
 
@@ -122,13 +123,10 @@ export default function ReviewsAdmin() {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-display font-light text-gray-800 mb-2">
-          Product Reviews
-        </h1>
-        <p className="text-gray-600">Manage customer reviews and ratings</p>
-      </div>
+    <>
+      <AdminHeader title="Reviews" subtitle="Manage customer reviews and ratings" />
+      <div className="container mx-auto px-6 py-8">
+        <h2 className="text-2xl font-serif text-stone-900 mb-8">Product Reviews</h2>
 
       {/* Filter Buttons */}
       <div className="mb-6 flex flex-wrap gap-2">
@@ -229,6 +227,7 @@ export default function ReviewsAdmin() {
           ))}
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }
