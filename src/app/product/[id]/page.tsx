@@ -232,19 +232,19 @@ export default function ProductDetailPage() {
               <div className="space-y-3">
                 <button
                   onClick={handleBuyNow}
-                  className="w-full bg-amber-900 hover:bg-amber-800 text-white py-4 px-6 flex items-center justify-center gap-3 transition-colors duration-300 group"
+                  className="w-full bg-stone-900 hover:bg-stone-800 text-white py-4 px-6 rounded-lg flex items-center justify-center gap-3 transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
                 >
-                  <CreditCard className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                  <span className="text-sm uppercase tracking-[0.15em] font-light">
+                  <CreditCard className="w-5 h-5" />
+                  <span className="text-sm uppercase tracking-[0.15em] font-medium">
                     Buy Now
                   </span>
                 </button>
                 <button
                   onClick={handleAddToCart}
-                  className="w-full bg-stone-900 hover:bg-stone-800 text-white py-4 px-6 flex items-center justify-center gap-3 transition-colors duration-300 group"
+                  className="w-full bg-white hover:bg-stone-50 text-stone-900 py-4 px-6 rounded-lg flex items-center justify-center gap-3 transition-all duration-300 border border-stone-300 hover:border-stone-400 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
                 >
-                  <ShoppingCart className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                  <span className="text-sm uppercase tracking-[0.15em] font-light">
+                  <ShoppingCart className="w-5 h-5" />
+                  <span className="text-sm uppercase tracking-[0.15em] font-medium">
                     Add to Cart
                   </span>
                 </button>

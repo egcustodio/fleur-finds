@@ -5,7 +5,7 @@ import { useCart } from "@/context/CartContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase";
 import { toast } from "sonner";
-import { Calendar, MapPin, Tag, ShoppingBag, CreditCard } from "lucide-react";
+import { MapPin, Tag, ShoppingBag, CreditCard } from "lucide-react";
 import Image from "next/image";
 
 function CheckoutContent() {
@@ -27,8 +27,6 @@ function CheckoutContent() {
     phone: "",
     delivery_address: "",
     notes: "",
-    rental_start_date: "",
-    rental_end_date: "",
   });
 
   // Load Buy Now product if in Buy Now mode
@@ -185,8 +183,6 @@ function CheckoutContent() {
           total: total,
           promo_code: promoApplied ? promoCode.toUpperCase() : null,
           status: "pending",
-          rental_start_date: formData.rental_start_date || null,
-          rental_end_date: formData.rental_end_date || null,
         })
         .select()
         .single();
@@ -320,40 +316,6 @@ function CheckoutContent() {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
                   placeholder="Complete delivery address (Naga City or Pili, Camarines Sur)"
                 />
-              </div>
-
-              {/* Rental Dates (Optional) */}
-              <div>
-                <h2 className="text-xl font-display font-semibold text-gray-800 mb-4 flex items-center">
-                  <Calendar className="w-5 h-5 mr-2 text-primary-600" />
-                  Rental Period (Optional)
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Start Date
-                    </label>
-                    <input
-                      type="date"
-                      name="rental_start_date"
-                      value={formData.rental_start_date}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      End Date
-                    </label>
-                    <input
-                      type="date"
-                      name="rental_end_date"
-                      value={formData.rental_end_date}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
-                    />
-                  </div>
-                </div>
               </div>
 
               {/* Additional Notes */}

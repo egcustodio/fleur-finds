@@ -281,34 +281,32 @@ export default function ProductCategories() {
                     </div>
                   </Link>
 
-                  {/* Luxury Action Buttons - Outside Link */}
+                  {/* Action Buttons - Outside Link */}
                   <div className="px-5 pb-5">
                     {product.in_stock ? (
                       <div className="grid grid-cols-2 gap-3">
-                        {/* Buy Now - Gradient Premium Button */}
+                        {/* Buy Now - Clean Simple Button */}
                         <button
                           onClick={(e) => handleBuyNow(e, product)}
-                          className="relative overflow-hidden bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 text-white py-3.5 rounded-xl text-xs uppercase tracking-[0.15em] font-medium transition-all duration-300 shadow-md hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 group/btn"
+                          className="bg-stone-900 hover:bg-stone-800 text-white py-3.5 rounded-lg text-xs uppercase tracking-[0.15em] font-medium transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
                         >
-                          <CreditCard className="w-4 h-4 group-hover/btn:rotate-12 transition-transform duration-300" />
+                          <CreditCard className="w-4 h-4" />
                           <span>Buy Now</span>
-                          {/* Shimmer Effect */}
-                          <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                         </button>
                         
-                        {/* Add to Cart - Elegant Dark Button */}
+                        {/* Add to Cart - Light Outline Button */}
                         <button
                           onClick={(e) => handleAddToCart(e, product)}
-                          className="relative overflow-hidden bg-stone-900 hover:bg-stone-800 text-white py-3.5 rounded-xl text-xs uppercase tracking-[0.15em] font-medium transition-all duration-300 shadow-md hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 group/btn border border-stone-800 hover:border-stone-700"
+                          className="bg-white hover:bg-stone-50 text-stone-900 py-3.5 rounded-lg text-xs uppercase tracking-[0.15em] font-medium transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 flex items-center justify-center gap-2 border border-stone-300 hover:border-stone-400"
                         >
-                          <ShoppingCart className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-300" />
+                          <ShoppingCart className="w-4 h-4" />
                           <span>Add to Cart</span>
                         </button>
                       </div>
                     ) : (
                       <button
                         disabled
-                        className="w-full bg-stone-100 text-stone-400 py-3.5 rounded-xl text-xs uppercase tracking-[0.15em] font-medium cursor-not-allowed border border-stone-200"
+                        className="w-full bg-stone-100 text-stone-400 py-3.5 rounded-lg text-xs uppercase tracking-[0.15em] font-medium cursor-not-allowed border border-stone-200"
                       >
                         <span className="flex items-center justify-center gap-2">
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
