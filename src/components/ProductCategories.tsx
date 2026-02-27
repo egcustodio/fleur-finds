@@ -72,16 +72,21 @@ export default function ProductCategories() {
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        .order('order', { ascending: true });
+        .order('created_at', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error.message, error.code, error.details);
+        throw error;
+      }
       setProducts(data || []);
       
-      // Extract unique categories
-      const uniqueCategories = ["All", ...new Set(data?.map(p => p.category).filter(Boolean) as string[])];
-      setCategories(uniqueCategories);
-    } catch (error) {
-      console.error('Error fetching products:', error);
+      // Extract unique categories, preserve defined order
+      const definedOrder = ["Bouquets", "Customized Bouquets", "Garland/Lei", "Money Bouquet", "Satin Bouquet", "Wedding"];
+      const dbCategories = [...new Set(data?.map(p => p.category).filter(Boolean) as string[])];
+      const sortedCategories = ["All", ...definedOrder.filter(c => dbCategories.includes(c)), ...dbCategories.filter(c => !definedOrder.includes(c))];
+      setCategories(sortedCategories);
+    } catch (error: any) {
+      console.error('Error fetching products:', error?.message || error);
     } finally {
       setLoading(false);
     }

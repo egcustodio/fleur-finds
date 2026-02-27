@@ -70,9 +70,12 @@ export default function ProductsAdmin() {
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .order("order", { ascending: true });
+        .order("created_at", { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase error:", error.message, error.code);
+        throw error;
+      }
       setProducts(data || []);
     } catch (error) {
       console.error("Error fetching products:", error);
